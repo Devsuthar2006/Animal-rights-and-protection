@@ -25,23 +25,96 @@
             cursor: none; /* Hide default cursor */
         }
         
-        /* Puppy cursor effect */
+        /* Realistic 3D Virtual Golden Retriever Puppy */
         .puppy-cursor {
             position: fixed;
-            width: 40px;
-            height: 40px;
+            width: 80px;
+            height: 60px;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.1s ease-out;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f59e0b" stroke="%23d97706" stroke-width="2"/><circle cx="40" cy="40" r="5" fill="%23374151"/><circle cx="60" cy="40" r="5" fill="%23374151"/><ellipse cx="50" cy="60" rx="8" ry="4" fill="%23374151"/><path d="M30 30 Q50 20 70 30" stroke="%23374151" stroke-width="3" fill="none"/><path d="M25 50 Q35 45 30 60" stroke="%23374151" stroke-width="2" fill="none"/><path d="M75 50 Q65 45 70 60" stroke="%23374151" stroke-width="2" fill="none"/></svg>');
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             background-size: contain;
             background-repeat: no-repeat;
-            animation: puppyRun 0.5s infinite alternate;
+            filter: drop-shadow(4px 8px 16px rgba(0, 0, 0, 0.3));
+            transform-style: preserve-3d;
         }
         
-        @keyframes puppyRun {
-            0% { transform: translateY(0px) rotate(-2deg); }
-            100% { transform: translateY(-2px) rotate(2deg); }
+        /* Golden Retriever Puppy Sprites - Based on Reference Image */
+        
+        /* Front View - Happy Face */
+        .puppy-front-idle {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.2" cy="0.15" r="0.9"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="earGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.4" cy="0.3" r="0.7"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="75" rx="48" ry="28" fill="url(%23furGrad)"/><ellipse cx="80" cy="72" rx="45" ry="25" fill="url(%23furGrad)" opacity="0.8"/><ellipse cx="80" cy="45" rx="32" ry="25" fill="url(%23headGrad)"/><ellipse cx="80" cy="42" rx="29" ry="22" fill="url(%23headGrad)" opacity="0.9"/><ellipse cx="70" cy="38" rx="4" ry="6" fill="%23000"/><ellipse cx="90" cy="38" rx="4" ry="6" fill="%23000"/><ellipse cx="80" cy="52" rx="6" ry="4" fill="%232d1810"/><ellipse cx="80" cy="56" rx="3" ry="2" fill="%23ff69b4"/><ellipse cx="68" cy="36" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="88" cy="36" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="60" cy="32" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(-25 60 32)"/><ellipse cx="100" cy="32" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(25 100 32)"/><ellipse cx="50" cy="95" rx="9" ry="18" fill="url(%23pawGrad)"/><ellipse cx="110" cy="95" rx="9" ry="18" fill="url(%23pawGrad)"/><ellipse cx="68" cy="98" rx="8" ry="15" fill="url(%23pawGrad)"/><ellipse cx="92" cy="98" rx="8" ry="15" fill="url(%23pawGrad)"/><ellipse cx="48" cy="113" rx="7" ry="5" fill="%232d1810"/><ellipse cx="112" cy="113" rx="7" ry="5" fill="%232d1810"/><ellipse cx="66" cy="113" rx="6" ry="5" fill="%232d1810"/><ellipse cx="94" cy="113" rx="6" ry="5" fill="%232d1810"/><path d="M25 65 Q35 60 30 85" stroke="url(%23furGrad)" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="80" cy="54" rx="3" ry="2" fill="%23fff" opacity="0.6"/></svg>');
+        }
+        
+        /* Walking Animation Frame 1 */
+        .puppy-walk-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.2" cy="0.15" r="0.9"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="earGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.4" cy="0.3" r="0.7"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="77" rx="48" ry="26" fill="url(%23furGrad)" transform="rotate(1 80 77)"/><ellipse cx="80" cy="74" rx="45" ry="23" fill="url(%23furGrad)" opacity="0.8" transform="rotate(1 80 74)"/><ellipse cx="82" cy="47" rx="32" ry="25" fill="url(%23headGrad)"/><ellipse cx="82" cy="44" rx="29" ry="22" fill="url(%23headGrad)" opacity="0.9"/><ellipse cx="72" cy="40" rx="4" ry="6" fill="%23000"/><ellipse cx="92" cy="40" rx="4" ry="6" fill="%23000"/><ellipse cx="82" cy="54" rx="6" ry="4" fill="%232d1810"/><ellipse cx="82" cy="58" rx="3" ry="2" fill="%23ff69b4"/><ellipse cx="70" cy="38" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="90" cy="38" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="62" cy="34" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(-20 62 34)"/><ellipse cx="102" cy="34" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(20 102 34)"/><ellipse cx="45" cy="90" rx="8" ry="15" fill="url(%23pawGrad)" transform="rotate(-10 45 90)"/><ellipse cx="115" cy="100" rx="9" ry="20" fill="url(%23pawGrad)" transform="rotate(5 115 100)"/><ellipse cx="70" cy="100" rx="9" ry="20" fill="url(%23pawGrad)" transform="rotate(-2 70 100)"/><ellipse cx="95" cy="90" rx="8" ry="15" fill="url(%23pawGrad)" transform="rotate(10 95 90)"/><ellipse cx="43" cy="105" rx="6" ry="4" fill="%232d1810"/><ellipse cx="117" cy="120" rx="7" ry="5" fill="%232d1810"/><ellipse cx="68" cy="120" rx="7" ry="5" fill="%232d1810"/><ellipse cx="93" cy="105" rx="6" ry="4" fill="%232d1810"/><path d="M25 67 Q35 62 30 87" stroke="url(%23furGrad)" stroke-width="8" fill="none" stroke-linecap="round" transform="rotate(5 30 77)"/></svg>');
+        }
+        
+        /* Walking Animation Frame 2 */
+        .puppy-walk-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.2" cy="0.15" r="0.9"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="earGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.4" cy="0.3" r="0.7"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="73" rx="48" ry="30" fill="url(%23furGrad)" transform="rotate(-1 80 73)"/><ellipse cx="80" cy="70" rx="45" ry="27" fill="url(%23furGrad)" opacity="0.8" transform="rotate(-1 80 70)"/><ellipse cx="78" cy="43" rx="32" ry="25" fill="url(%23headGrad)"/><ellipse cx="78" cy="40" rx="29" ry="22" fill="url(%23headGrad)" opacity="0.9"/><ellipse cx="68" cy="36" rx="4" ry="6" fill="%23000"/><ellipse cx="88" cy="36" rx="4" ry="6" fill="%23000"/><ellipse cx="78" cy="50" rx="6" ry="4" fill="%232d1810"/><ellipse cx="78" cy="54" rx="3" ry="2" fill="%23ff69b4"/><ellipse cx="66" cy="34" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="86" cy="34" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="58" cy="30" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(-25 58 30)"/><ellipse cx="98" cy="30" rx="10" ry="15" fill="url(%23earGrad)" transform="rotate(25 98 30)"/><ellipse cx="55" cy="100" rx="9" ry="20" fill="url(%23pawGrad)" transform="rotate(-5 55 100)"/><ellipse cx="105" cy="90" rx="8" ry="15" fill="url(%23pawGrad)" transform="rotate(-10 105 90)"/><ellipse cx="60" cy="90" rx="8" ry="15" fill="url(%23pawGrad)" transform="rotate(10 60 90)"/><ellipse cx="100" cy="100" rx="9" ry="20" fill="url(%23pawGrad)" transform="rotate(2 100 100)"/><ellipse cx="53" cy="120" rx="7" ry="5" fill="%23d1810"/><ellipse cx="103" cy="105" rx="6" ry="4" fill="%23d1810"/><ellipse cx="58" cy="105" rx="6" ry="4" fill="%23d1810"/><ellipse cx="98" cy="120" rx="7" ry="5" fill="%232d1810"/><path d="M27 63 Q37 58 32 83" stroke="url(%23furGrad)" stroke-width="8" fill="none" stroke-linecap="round" transform="rotate(-5 32 73)"/></svg>');
+        }
+        
+        /* Running Animation Frame 1 */
+        .puppy-run-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.2" cy="0.15" r="0.9"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="earGrad" cx="0.3" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.4" cy="0.3" r="0.7"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="65" rx="50" ry="22" fill="url(%23furGrad)" transform="rotate(-8 80 65)"/><ellipse cx="80" cy="62" rx="47" ry="19" fill="url(%23furGrad)" opacity="0.8" transform="rotate(-8 80 62)"/><ellipse cx="88" cy="35" rx="34" ry="23" fill="url(%23headGrad)" transform="rotate(-3 88 35)"/><ellipse cx="88" cy="32" rx="31" ry="20" fill="url(%23headGrad)" opacity="0.9" transform="rotate(-3 88 32)"/><ellipse cx="78" cy="28" rx="4" ry="6" fill="%23000"/><ellipse cx="98" cy="28" rx="4" ry="6" fill="%23000"/><ellipse cx="88" cy="42" rx="6" ry="4" fill="%232d1810"/><ellipse cx="88" cy="46" rx="3" ry="2" fill="%23ff69b4"/><ellipse cx="76" cy="26" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="96" cy="26" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><ellipse cx="68" cy="22" rx="11" ry="16" fill="url(%23earGrad)" transform="rotate(-35 68 22)"/><ellipse cx="108" cy="22" rx="11" ry="16" fill="url(%23earGrad)" transform="rotate(35 108 22)"/><ellipse cx="35" cy="80" rx="7" ry="12" fill="url(%23pawGrad)" transform="rotate(50 35 80)"/><ellipse cx="125" cy="70" rx="10" ry="22" fill="url(%23pawGrad)" transform="rotate(-25 125 70)"/><ellipse cx="60" cy="70" rx="10" ry="22" fill="url(%23pawGrad)" transform="rotate(20 60 70)"/><ellipse cx="100" cy="80" rx="7" ry="12" fill="url(%23pawGrad)" transform="rotate(-45 100 80)"/><ellipse cx="33" cy="92" rx="5" ry="3" fill="%23d1810"/><ellipse cx="127" cy="92" rx="8" ry="5" fill="%23d1810"/><ellipse cx="58" cy="92" rx="8" ry="5" fill="%232d1810"/><ellipse cx="98" cy="92" rx="5" ry="3" fill="%232d1810"/><path d="M20 50 Q30 40 25 70" stroke="url(%23furGrad)" stroke-width="9" fill="none" stroke-linecap="round" transform="rotate(25 25 55)"/></svg>');
+        }
+        
+        /* Side View Left */
+        .puppy-side-left {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.2" cy="0.3" r="0.9"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.15" cy="0.2" r="0.85"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.4" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="70" rx="55" ry="28" fill="url(%23furGrad)"/><ellipse cx="78" cy="67" rx="52" ry="25" fill="url(%23furGrad)" opacity="0.8"/><ellipse cx="45" cy="50" rx="22" ry="20" fill="url(%23headGrad)"/><ellipse cx="43" cy="47" rx="19" ry="17" fill="url(%23headGrad)" opacity="0.9"/><ellipse cx="37" cy="45" rx="4" ry="6" fill="%23000"/><ellipse cx="35" cy="55" rx="5" ry="3" fill="%232d1810"/><ellipse cx="35" cy="43" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><path d="M30 38 Q37 33 45 40" stroke="%232d1810" stroke-width="2" fill="none"/><ellipse cx="32" cy="35" rx="8" ry="12" fill="%23f5d982" transform="rotate(-15 32 35)"/><ellipse cx="65" cy="95" rx="8" ry="20" fill="url(%23pawGrad)"/><ellipse cx="95" cy="95" rx="8" ry="20" fill="url(%23pawGrad)"/><ellipse cx="75" cy="98" rx="7" ry="17" fill="url(%23pawGrad)"/><ellipse cx="85" cy="98" rx="7" ry="17" fill="url(%23pawGrad)"/><ellipse cx="63" cy="115" rx="6" ry="4" fill="%232d1810"/><ellipse cx="93" cy="115" rx="6" ry="4" fill="%232d1810"/><ellipse cx="73" cy="115" rx="5" ry="4" fill="%232d1810"/><ellipse cx="83" cy="115" rx="5" ry="4" fill="%232d1810"/><path d="M120 60 Q130 55 135 80" stroke="url(%23furGrad)" stroke-width="7" fill="none" stroke-linecap="round"/></svg>');
+        }
+        
+        /* Side View Right */
+        .puppy-side-right {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120"><defs><radialGradient id="furGrad" cx="0.8" cy="0.3" r="0.9"><stop offset="0%" stop-color="%23f9e4a8"/><stop offset="20%" stop-color="%23f5d982"/><stop offset="50%" stop-color="%23e6c55a"/><stop offset="80%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient><radialGradient id="headGrad" cx="0.85" cy="0.2" r="0.85"><stop offset="0%" stop-color="%23fef7cd"/><stop offset="30%" stop-color="%23f9e4a8"/><stop offset="70%" stop-color="%23e6c55a"/><stop offset="100%" stop-color="%23d4af37"/></radialGradient><radialGradient id="pawGrad" cx="0.6" cy="0.2" r="0.8"><stop offset="0%" stop-color="%23e6c55a"/><stop offset="60%" stop-color="%23d4af37"/><stop offset="100%" stop-color="%23b8941f"/></radialGradient></defs><ellipse cx="80" cy="70" rx="55" ry="28" fill="url(%23furGrad)"/><ellipse cx="82" cy="67" rx="52" ry="25" fill="url(%23furGrad)" opacity="0.8"/><ellipse cx="115" cy="50" rx="22" ry="20" fill="url(%23headGrad)"/><ellipse cx="117" cy="47" rx="19" ry="17" fill="url(%23headGrad)" opacity="0.9"/><ellipse cx="123" cy="45" rx="4" ry="6" fill="%23000"/><ellipse cx="125" cy="55" rx="5" ry="3" fill="%232d1810"/><ellipse cx="125" cy="43" rx="1.5" ry="2" fill="%23fff" opacity="0.9"/><path d="M115 40 Q123 33 130 38" stroke="%232d1810" stroke-width="2" fill="none"/><ellipse cx="128" cy="35" rx="8" ry="12" fill="%23f5d982" transform="rotate(15 128 35)"/><ellipse cx="65" cy="95" rx="8" ry="20" fill="url(%23pawGrad)"/><ellipse cx="95" cy="95" rx="8" ry="20" fill="url(%23pawGrad)"/><ellipse cx="75" cy="98" rx="7" ry="17" fill="url(%23pawGrad)"/><ellipse cx="85" cy="98" rx="7" ry="17" fill="url(%23pawGrad)"/><ellipse cx="63" cy="115" rx="6" ry="4" fill="%232d1810"/><ellipse cx="93" cy="115" rx="6" ry="4" fill="%232d1810"/><ellipse cx="73" cy="115" rx="5" ry="4" fill="%232d1810"/><ellipse cx="83" cy="115" rx="5" ry="4" fill="%232d1810"/><path d="M25 60 Q15 55 10 80" stroke="url(%23furGrad)" stroke-width="7" fill="none" stroke-linecap="round"/></svg>');
+        }
+        
+        /* Realistic Natural Animations */
+        @keyframes puppyBreathing {
+            0%, 100% { 
+                transform: perspective(400px) rotateX(0deg) scale(1);
+                filter: drop-shadow(4px 8px 16px rgba(0, 0, 0, 0.3));
+            }
+            50% { 
+                transform: perspective(400px) rotateX(1deg) scale(1.02);
+                filter: drop-shadow(3px 6px 12px rgba(0, 0, 0, 0.25));
+            }
+        }
+        
+        @keyframes puppyWalking {
+            0%, 100% { 
+                transform: perspective(400px) translateY(0px) rotateX(0deg);
+                filter: drop-shadow(4px 8px 16px rgba(0, 0, 0, 0.3));
+            }
+            50% { 
+                transform: perspective(400px) translateY(-3px) rotateX(-1deg);
+                filter: drop-shadow(3px 5px 12px rgba(0, 0, 0, 0.25));
+            }
+        }
+        
+        @keyframes puppyRunning {
+            0%, 100% { 
+                transform: perspective(400px) translateY(0px) rotateX(0deg) scaleY(1);
+                filter: drop-shadow(4px 10px 20px rgba(0, 0, 0, 0.4));
+            }
+            50% { 
+                transform: perspective(400px) translateY(-8px) rotateX(-3deg) scaleY(0.92);
+                filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.2));
+            }
+        }
+        
+        .puppy-breathing-anim {
+            animation: puppyBreathing 4s infinite ease-in-out;
+        }
+        
+        .puppy-walking-anim {
+            animation: puppyWalking 0.6s infinite ease-in-out;
+        }
+        
+        .puppy-running-anim {
+            animation: puppyRunning 0.3s infinite ease-in-out;
         }
         
         /* Puppy trail effect */
@@ -62,11 +135,28 @@
         }
         
         .hero-bg {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                        url('https://images.unsplash.com/photo-1549366021-9f761d77f2e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+            z-index: -1;
         }
         
         .card-hover {
@@ -146,7 +236,17 @@
 
     <!-- Hero Section -->
     <section class="hero-bg min-h-screen flex items-center justify-center text-white">
-        <div class="text-center max-w-4xl mx-auto px-4" data-aos="fade-up">
+        <!-- Video Background -->
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="https://player.vimeo.com/external/373077184.hd.mp4?s=1d84f13b4b0c7efaebc2496bec0b1a4df7bf4fd5&profile_id=174" type="video/mp4">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            <!-- Fallback for browsers that don't support video -->
+            <div class="bg-gradient-to-r from-green-800 to-blue-800 absolute inset-0"></div>
+        </video>
+        <!-- Video Overlay -->
+        <div class="hero-overlay"></div>
+        
+        <div class="text-center max-w-4xl mx-auto px-4 relative z-10" data-aos="fade-up">
             <h1 class="text-5xl md:text-7xl font-bold mb-6">
                 Protect Our <span class="text-yellow-400">Animal Friends</span>
             </h1>
@@ -261,7 +361,7 @@
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
+            <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-8">
                 <div>
                     <div class="flex items-center mb-4">
                         <i class="fas fa-paw text-3xl text-green-400 mr-3"></i>
@@ -314,6 +414,23 @@
                         <p><i class="fas fa-envelope mr-2"></i> Devilalsuthar2006@gmail.com</p>
                     </div>
                 </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Developer</h3>
+                    <p class="text-gray-400 mb-3">Created by Devilal Suthar</p>
+                    <div class="flex space-x-3">
+                        <a href="www.linkedin.com/in/devilal-suthar-37a310313" target="_blank" class="text-gray-400 hover:text-blue-400 transition-colors" title="LinkedIn Profile">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="https://github.com/Devsuthar2006" target="_blank" class="text-gray-400 hover:text-gray-300 transition-colors" 
+                        title="GitHub Profile">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="mailto:Devilalsuthar2006@gmail.com" class="text-gray-400 hover:text-green-400 transition-colors" title="Email Developer">
+                            <i class="fas fa-user-circle text-xl"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
             
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
@@ -351,71 +468,265 @@
             });
         });
 
-        // Puppy cursor effect
+        // Realistic 3D Virtual Golden Retriever Puppy System
         const puppyCursor = document.getElementById('puppyCursor');
-        let mouseX = 0, mouseY = 0;
-        let puppyX = 0, puppyY = 0;
-        let trailElements = [];
-
-        // Track mouse movement
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        let puppyState = 'idle';
+        let lastMousePosition = { x: 0, y: 0 };
+        let currentPosition = { x: 0, y: 0 };
+        let targetPosition = { x: 0, y: 0 };
+        let isMouseMoving = false;
+        let mouseStoppedTimeout = null;
+        let behaviorInterval = null;
+        let velocity = { x: 0, y: 0 };
+        let direction = 'front'; // front, left, right, side-left, side-right
+        let animationFrame = 0;
+        
+        // Natural behavior states
+        let naturalBehaviors = ['idle', 'scratch', 'sniff', 'tail-wag', 'play', 'curious'];
+        let currentBehavior = 'idle';
+        let behaviorTimer = 0;
+        let behaviorDuration = 0;
+        
+        function initializePuppy() {
+            if (window.innerWidth <= 768) {
+                puppyCursor.style.display = 'none';
+                return;
+            }
             
-            // Create trail effect
-            createTrail(mouseX, mouseY);
-        });
-
-        // Smooth puppy following animation
-        function animatePuppy() {
-            // Calculate distance between mouse and puppy
-            const distanceX = mouseX - puppyX;
-            const distanceY = mouseY - puppyY;
+            puppyCursor.className = 'puppy-cursor puppy-front-idle puppy-breathing-anim';
+            currentPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            targetPosition = { x: currentPosition.x, y: currentPosition.y };
             
-            // Move puppy towards mouse with some lag for natural following effect
-            puppyX += distanceX * 0.1;
-            puppyY += distanceY * 0.1;
+            puppyCursor.style.left = currentPosition.x + 'px';
+            puppyCursor.style.top = currentPosition.y + 'px';
             
-            // Update puppy position
-            puppyCursor.style.left = puppyX - 20 + 'px';
-            puppyCursor.style.top = puppyY - 20 + 'px';
-            
-            // Add slight rotation based on movement direction
-            const angle = Math.atan2(distanceY, distanceX) * (180 / Math.PI);
-            puppyCursor.style.transform = `rotate(${angle}deg)`;
-            
-            requestAnimationFrame(animatePuppy);
+            // Start natural behavior system
+            startNaturalBehaviors();
         }
-
-        // Create trail effect
-        function createTrail(x, y) {
-            const trail = document.createElement('div');
-            trail.className = 'puppy-trail';
-            trail.style.left = x - 10 + 'px';
-            trail.style.top = y - 10 + 'px';
-            document.body.appendChild(trail);
+        
+        function updatePuppySprite() {
+            if (!puppyCursor) return;
             
-            // Remove trail after animation
-            setTimeout(() => {
-                if (trail.parentNode) {
-                    trail.parentNode.removeChild(trail);
+            // Remove all sprite and animation classes
+            puppyCursor.className = 'puppy-cursor';
+            
+            // Determine sprite based on state and direction
+            if (puppyState === 'following') {
+                const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+                
+                if (speed > 8) {
+                    // Fast movement - running
+                    puppyCursor.classList.add('puppy-run-1', 'puppy-running-anim');
+                } else if (speed > 2) {
+                    // Medium movement - walking
+                    if (animationFrame % 20 < 10) {
+                        puppyCursor.classList.add('puppy-walk-1', 'puppy-walking-anim');
+                    } else {
+                        puppyCursor.classList.add('puppy-walk-2', 'puppy-walking-anim');
+                    }
+                } else {
+                    // Slow movement or turning
+                    if (direction === 'left') {
+                        puppyCursor.classList.add('puppy-side-left', 'puppy-breathing-anim');
+                    } else if (direction === 'right') {
+                        puppyCursor.classList.add('puppy-side-right', 'puppy-breathing-anim');
+                    } else {
+                        puppyCursor.classList.add('puppy-front-idle', 'puppy-breathing-anim');
+                    }
                 }
-            }, 800);
+            } else {
+                // Natural behaviors when not following cursor
+                switch (currentBehavior) {
+                    case 'scratch':
+                        puppyCursor.classList.add('puppy-side-left', 'puppy-breathing-anim');
+                        // Add scratching motion
+                        if (animationFrame % 10 < 5) {
+                            puppyCursor.style.transform += ' translateY(2px) rotateZ(-2deg)';
+                        } else {
+                            puppyCursor.style.transform += ' translateY(-1px) rotateZ(1deg)';
+                        }
+                        break;
+                    case 'sniff':
+                        puppyCursor.classList.add('puppy-front-idle', 'puppy-breathing-anim');
+                        // Lower head for sniffing
+                        puppyCursor.style.transform += ' translateY(8px) rotateX(15deg)';
+                        break;
+                    case 'tail-wag':
+                        puppyCursor.classList.add('puppy-side-right', 'puppy-breathing-anim');
+                        // Add tail wagging motion
+                        if (animationFrame % 8 < 4) {
+                            puppyCursor.style.transform += ' rotateZ(2deg)';
+                        } else {
+                            puppyCursor.style.transform += ' rotateZ(-2deg)';
+                        }
+                        break;
+                    case 'play':
+                        puppyCursor.classList.add('puppy-front-idle', 'puppy-running-anim');
+                        // Bouncy play motion
+                        if (animationFrame % 15 < 8) {
+                            puppyCursor.style.transform += ' translateY(-5px) scaleY(0.9)';
+                        }
+                        break;
+                    case 'curious':
+                        if (animationFrame % 30 < 15) {
+                            puppyCursor.classList.add('puppy-side-left', 'puppy-breathing-anim');
+                        } else {
+                            puppyCursor.classList.add('puppy-side-right', 'puppy-breathing-anim');
+                        }
+                        // Head tilting motion
+                        puppyCursor.style.transform += ` rotateZ(${Math.sin(animationFrame * 0.2) * 5}deg)`;
+                        break;
+                    default:
+                        puppyCursor.classList.add('puppy-front-idle', 'puppy-breathing-anim');
+                }
+            }
+            
+            animationFrame++;
         }
-
-        // Initialize puppy position
-        puppyX = window.innerWidth / 2;
-        puppyY = window.innerHeight / 2;
-        puppyCursor.style.left = puppyX - 20 + 'px';
-        puppyCursor.style.top = puppyY - 20 + 'px';
-
-        // Start animation
-        animatePuppy();
-
-        // Hide puppy cursor on mobile devices
-        if (window.innerWidth <= 768) {
-            puppyCursor.style.display = 'none';
-            document.body.style.cursor = 'auto';
+        
+        function calculateDirection() {
+            const dx = targetPosition.x - currentPosition.x;
+            const dy = targetPosition.y - currentPosition.y;
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
+                return 'front';
+            }
+            
+            if (angle > -45 && angle <= 45) {
+                return 'right';
+            } else if (angle > 45 && angle <= 135) {
+                return 'front';
+            } else if (angle > 135 || angle <= -135) {
+                return 'left';
+            } else {
+                return 'front';
+            }
+        }
+        
+        function updatePuppyPosition() {
+            if (!puppyCursor || window.innerWidth <= 768) return;
+            
+            // Smooth following with natural puppy-like movement
+            const dx = targetPosition.x - currentPosition.x;
+            const dy = targetPosition.y - currentPosition.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > 5) {
+                puppyState = 'following';
+                
+                // Natural acceleration and deceleration like a real puppy
+                const maxSpeed = isMouseMoving ? 15 : 8;
+                const acceleration = 0.6;
+                
+                // Calculate desired velocity with momentum
+                const desiredVelocityX = (dx / distance) * Math.min(distance * 0.12, maxSpeed);
+                const desiredVelocityY = (dy / distance) * Math.min(distance * 0.12, maxSpeed);
+                
+                // Apply natural acceleration
+                velocity.x += (desiredVelocityX - velocity.x) * acceleration;
+                velocity.y += (desiredVelocityY - velocity.y) * acceleration;
+                
+                // Update position with momentum
+                currentPosition.x += velocity.x;
+                currentPosition.y += velocity.y;
+                
+                // Calculate direction for realistic sprite changes
+                direction = calculateDirection();
+                
+                // Add slight randomness for natural movement
+                if (Math.random() < 0.1) {
+                    currentPosition.x += (Math.random() - 0.5) * 3;
+                    currentPosition.y += (Math.random() - 0.5) * 3;
+                }
+            } else {
+                puppyState = 'idle';
+                // Apply friction when close to target
+                velocity.x *= 0.88;
+                velocity.y *= 0.88;
+            }
+            
+            // Natural idle movement like a real puppy
+            if (puppyState === 'idle' && Math.random() < 0.015) {
+                currentPosition.x += (Math.random() - 0.5) * 4;
+                currentPosition.y += (Math.random() - 0.5) * 4;
+            }
+            
+            // Keep puppy within screen bounds
+            const maxX = window.innerWidth - 80;
+            const maxY = window.innerHeight - 60;
+            
+            currentPosition.x = Math.max(0, Math.min(maxX, currentPosition.x));
+            currentPosition.y = Math.max(0, Math.min(maxY, currentPosition.y));
+            
+            // Update DOM position
+            puppyCursor.style.left = currentPosition.x + 'px';
+            puppyCursor.style.top = currentPosition.y + 'px';
+            
+            // Reset transform before applying new ones
+            puppyCursor.style.transform = '';
+            
+            updatePuppySprite();
+        }
+        
+        function startNaturalBehaviors() {
+            behaviorInterval = setInterval(() => {
+                if (puppyState === 'idle') {
+                    behaviorTimer++;
+                    
+                    // Change behavior periodically like a real puppy
+                    if (behaviorTimer >= behaviorDuration) {
+                        currentBehavior = naturalBehaviors[Math.floor(Math.random() * naturalBehaviors.length)];
+                        behaviorDuration = Math.floor(Math.random() * 80) + 40; // 40-120 frames
+                        behaviorTimer = 0;
+                        
+                        // Some behaviors involve autonomous movement
+                        if (currentBehavior === 'play' || currentBehavior === 'curious') {
+                            const randomX = Math.random() * (window.innerWidth - 80);
+                            const randomY = Math.random() * (window.innerHeight - 60);
+                            targetPosition = { x: randomX, y: randomY };
+                        }
+                    }
+                }
+            }, 80); // Natural behavior update rate
+        }
+        
+        function handleMouseMovement(e) {
+            if (!puppyCursor || window.innerWidth <= 768) return;
+            
+            const mouseX = e.clientX - 40; // Center the puppy on cursor
+            const mouseY = e.clientY - 30;
+            
+            // Update target position
+            targetPosition.x = mouseX;
+            targetPosition.y = mouseY;
+            
+            isMouseMoving = true;
+            puppyState = 'following';
+            currentBehavior = 'following';
+            
+            // Reset idle behavior timer
+            clearTimeout(mouseStoppedTimeout);
+            mouseStoppedTimeout = setTimeout(() => {
+                isMouseMoving = false;
+                currentBehavior = 'idle';
+                behaviorTimer = 0;
+                behaviorDuration = Math.floor(Math.random() * 80) + 40;
+            }, 1200); // Wait longer before going idle for natural feel
+        }
+        
+        // Smooth animation loop
+        function animationLoop() {
+            updatePuppyPosition();
+            requestAnimationFrame(animationLoop);
+        }
+        
+        // Initialize the realistic 3D puppy system
+        document.addEventListener('mousemove', handleMouseMovement);
+        initializePuppy();
+        
+        if (window.innerWidth > 768) {
+            animationLoop();
         }
     </script>
 </body>
