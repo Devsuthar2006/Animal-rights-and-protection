@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate & Get Involved - Animal Rights & Protection</title>
+    <meta name="description" content="Support our mission through donations or volunteer with us. Every contribution helps protect animal rights and welfare worldwide.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif;
+            cursor: none; /* Hide default cursor */
+        }
+        
+        /* Puppy cursor effect */
+        .puppy-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f59e0b" stroke="%23d97706" stroke-width="2"/><circle cx="40" cy="40" r="5" fill="%23374151"/><circle cx="60" cy="40" r="5" fill="%23374151"/><ellipse cx="50" cy="60" rx="8" ry="4" fill="%23374151"/><path d="M30 30 Q50 20 70 30" stroke="%23374151" stroke-width="3" fill="none"/><path d="M25 50 Q35 45 30 60" stroke="%23374151" stroke-width="2" fill="none"/><path d="M75 50 Q65 45 70 60" stroke="%23374151" stroke-width="2" fill="none"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: puppyRun 0.5s infinite alternate;
+        }
+        
+        @keyframes puppyRun {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            100% { transform: translateY(-2px) rotate(2deg); }
+        }
+        
+        /* Puppy trail effect */
+        .puppy-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 9998;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+        
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
+        .btn-primary:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-2px); }
+        .btn-secondary { background: linear-gradient(135deg, #f59e0b, #d97706); transition: all 0.3s ease; }
+        .btn-secondary:hover { background: linear-gradient(135deg, #d97706, #b45309); transform: translateY(-2px); }
+        .form-input { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .form-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Puppy Cursor -->
+    <div class="puppy-cursor" id="puppyCursor"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-paw text-3xl text-green-600 mr-3"></i>
+                    <span class="text-2xl font-bold text-gray-800">Animal Rights</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="about.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="campaigns.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Campaigns</a>
+                        <a href="donate.html" class="text-green-600 px-3 py-2 rounded-md text-sm font-medium">Donate</a>
+                        <a href="contact.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-green-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="about.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">About</a>
+                <a href="campaigns.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Campaigns</a>
+                <a href="donate.html" class="text-green-600 block px-3 py-2 rounded-md text-base font-medium">Donate</a>
+                <a href="contact.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg py-20 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div data-aos="fade-up">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">Make a Difference</h1>
+                <p class="text-xl md:text-2xl leading-relaxed">Your support helps us protect animals and advocate for their rights worldwide</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Options -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Ways to Support</h2>
+                <p class="text-xl text-gray-600">Choose how you'd like to make an impact</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-8 border border-gray-200 card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center">
+                        <i class="fas fa-heart text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">One-Time Donation</h3>
+                        <p class="text-gray-600 mb-6">Make a single donation to support our ongoing animal protection efforts.</p>
+                        <div class="space-y-3">
+                            <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors" onclick="selectAmount(25)">$25</button>
+                            <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors" onclick="selectAmount(50)">$50</button>
+                            <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors" onclick="selectAmount(100)">$100</button>
+                            <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors" onclick="selectAmount(250)">$250</button>
+                        </div>
+                        <div class="mt-4">
+                            <input type="number" id="custom-amount" placeholder="Custom amount" class="w-full px-4 py-2 border border-gray-300 rounded-lg form-input focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-8 border border-gray-200 card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <i class="fas fa-calendar-alt text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Monthly Donation</h3>
+                        <p class="text-gray-600 mb-6">Become a monthly supporter and help us plan long-term animal protection programs.</p>
+                        <div class="space-y-3">
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors" onclick="selectMonthlyAmount(10)">$10/month</button>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors" onclick="selectMonthlyAmount(25)">$25/month</button>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors" onclick="selectMonthlyAmount(50)">$50/month</button>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors" onclick="selectMonthlyAmount(100)">$100/month</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-8 border border-gray-200 card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <i class="fas fa-gift text-4xl text-purple-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Sponsor an Animal</h3>
+                        <p class="text-gray-600 mb-6">Sponsor the care of a specific rescued animal and receive updates on their progress.</p>
+                        <div class="space-y-3">
+                            <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Dog - $30/month</button>
+                            <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Cat - $25/month</button>
+                            <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Wildlife - $50/month</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volunteer Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Volunteer With Us</h2>
+                <p class="text-xl text-gray-600">Join our community of dedicated volunteers making a difference</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div data-aos="fade-right">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-6">Volunteer Opportunities</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <i class="fas fa-paw text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Animal Care</h4>
+                                <p class="text-gray-600">Help with feeding, grooming, and caring for rescued animals at our shelter.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <i class="fas fa-chalkboard-teacher text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Education Programs</h4>
+                                <p class="text-gray-600">Assist with school presentations and community education initiatives.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <i class="fas fa-calendar-check text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Event Coordination</h4>
+                                <p class="text-gray-600">Help organize adoption events, fundraisers, and awareness campaigns.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <i class="fas fa-laptop text-green-600 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Digital Support</h4>
+                                <p class="text-gray-600">Assist with social media, website maintenance, and online campaigns.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-left">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-6">Volunteer Registration</h3>
+                        <form id="volunteer-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="age" class="block text-sm font-medium text-gray-700 mb-2">Age *</label>
+                                <input type="number" id="age" name="age" required min="16" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="interests" class="block text-sm font-medium text-gray-700 mb-2">Areas of Interest *</label>
+                                <select id="interests" name="interests" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                                    <option value="">Select an area</option>
+                                    <option value="animal-care">Animal Care</option>
+                                    <option value="education">Education Programs</option>
+                                    <option value="events">Event Coordination</option>
+                                    <option value="digital">Digital Support</option>
+                                    <option value="fundraising">Fundraising</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="availability" class="block text-sm font-medium text-gray-700 mb-2">Availability</label>
+                                <select id="availability" name="availability" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                                    <option value="">Select availability</option>
+                                    <option value="weekdays">Weekdays</option>
+                                    <option value="weekends">Weekends</option>
+                                    <option value="flexible">Flexible</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="experience" class="block text-sm font-medium text-gray-700 mb-2">Previous Experience</label>
+                                <textarea id="experience" name="experience" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none" placeholder="Tell us about any relevant experience..."></textarea>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                <label for="newsletter" class="ml-2 block text-sm text-gray-700">
+                                    Subscribe to our newsletter for updates
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Submit Application
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">What Our Supporters Say</h2>
+                <p class="text-xl text-gray-600">Hear from people who are making a difference</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-lg p-6 card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                             alt="Sarah" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Sarah Johnson</h4>
+                            <p class="text-sm text-gray-600">Monthly Donor</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"I've been supporting this organization for 3 years. Seeing the impact of my monthly donations through their updates keeps me motivated to continue helping."</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6 card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                             alt="Mike" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Mike Chen</h4>
+                            <p class="text-sm text-gray-600">Volunteer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Volunteering here has been incredibly rewarding. The team is passionate and the work we do directly helps animals in need."</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6 card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" 
+                             alt="Emily" class="w-12 h-12 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Emily Rodriguez</h4>
+                            <p class="text-sm text-gray-600">Animal Sponsor</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic">"Sponsoring Luna, a rescued dog, has been amazing. I get regular updates and photos showing her progress and happiness."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-green-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-4xl font-bold mb-6">Ready to Make a Difference?</h2>
+                <p class="text-xl mb-8 leading-relaxed">
+                    Every contribution, whether financial or through volunteering, helps us protect animals and advocate for their rights.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToDonation()" class="bg-white text-green-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-heart mr-2"></i>
+                        Donate Now
+                    </button>
+                    <button onclick="scrollToVolunteer()" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-green-600 transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-users mr-2"></i>
+                        Volunteer Today
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-paw text-3xl text-green-400 mr-3"></i>
+                        <span class="text-2xl font-bold">Animal Rights</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Dedicated to protecting and advocating for animal rights worldwide.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-youtube text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="campaigns.html" class="text-gray-400 hover:text-white transition-colors">Campaigns</a></li>
+                        <li><a href="donate.html" class="text-gray-400 hover:text-white transition-colors">Donate</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Get Involved</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Volunteer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fundraise</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Adopt a Pet</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Report Abuse</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i> Poornima University, Jaipur, Rajasthan</p>
+                        <p><i class="fas fa-phone mr-2"></i> +91 7410908869</p>
+                        <p><i class="fas fa-envelope mr-2"></i> Devilalsuthar2006@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Animal Rights & Protection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function selectAmount(amount) {
+            document.getElementById('custom-amount').value = amount;
+            // In a real application, this would redirect to payment processing
+            alert(`Thank you for choosing to donate $${amount}! This would redirect to our secure payment processor.`);
+        }
+
+        function selectMonthlyAmount(amount) {
+            // In a real application, this would redirect to payment processing
+            alert(`Thank you for choosing to donate $${amount} monthly! This would redirect to our secure payment processor.`);
+        }
+
+        function scrollToDonation() {
+            document.querySelector('.hero-bg').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToVolunteer() {
+            document.querySelector('.py-20.bg-gray-50').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Form validation
+        document.getElementById('volunteer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const age = document.getElementById('age').value;
+            const interests = document.getElementById('interests').value;
+            
+            if (!name || !email || !age || !interests) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            if (age < 16) {
+                alert('You must be at least 16 years old to volunteer.');
+                return;
+            }
+            
+            // In a real application, this would submit to a server
+            alert('Thank you for your volunteer application! We will contact you within 2-3 business days.');
+            this.reset();
+        });
+
+        // Puppy cursor effect
+        const puppyCursor = document.getElementById('puppyCursor');
+        let mouseX = 0, mouseY = 0;
+        let puppyX = 0, puppyY = 0;
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            createTrail(mouseX, mouseY);
+        });
+
+        // Smooth puppy following animation
+        function animatePuppy() {
+            const distanceX = mouseX - puppyX;
+            const distanceY = mouseY - puppyY;
+            puppyX += distanceX * 0.1;
+            puppyY += distanceY * 0.1;
+            puppyCursor.style.left = puppyX - 20 + 'px';
+            puppyCursor.style.top = puppyY - 20 + 'px';
+            const angle = Math.atan2(distanceY, distanceX) * (180 / Math.PI);
+            puppyCursor.style.transform = `rotate(${angle}deg)`;
+            requestAnimationFrame(animatePuppy);
+        }
+
+        // Create trail effect
+        function createTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'puppy-trail';
+            trail.style.left = x - 10 + 'px';
+            trail.style.top = y - 10 + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 800);
+        }
+
+        // Initialize puppy position
+        puppyX = window.innerWidth / 2;
+        puppyY = window.innerHeight / 2;
+        puppyCursor.style.left = puppyX - 20 + 'px';
+        puppyCursor.style.top = puppyY - 20 + 'px';
+        animatePuppy();
+
+        // Hide puppy cursor on mobile devices
+        if (window.innerWidth <= 768) {
+            puppyCursor.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        }
+    </script>
+</body>
+</html>

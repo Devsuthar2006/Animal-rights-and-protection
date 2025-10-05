@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaigns - Animal Rights & Protection</title>
+    <meta name="description" content="Explore our ongoing and past campaigns for animal rights, wildlife protection, and animal welfare initiatives.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif;
+            cursor: none; /* Hide default cursor */
+        }
+        
+        /* Puppy cursor effect */
+        .puppy-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f59e0b" stroke="%23d97706" stroke-width="2"/><circle cx="40" cy="40" r="5" fill="%23374151"/><circle cx="60" cy="40" r="5" fill="%23374151"/><ellipse cx="50" cy="60" rx="8" ry="4" fill="%23374151"/><path d="M30 30 Q50 20 70 30" stroke="%23374151" stroke-width="3" fill="none"/><path d="M25 50 Q35 45 30 60" stroke="%23374151" stroke-width="2" fill="none"/><path d="M75 50 Q65 45 70 60" stroke="%23374151" stroke-width="2" fill="none"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: puppyRun 0.5s infinite alternate;
+        }
+        
+        @keyframes puppyRun {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            100% { transform: translateY(-2px) rotate(2deg); }
+        }
+        
+        /* Puppy trail effect */
+        .puppy-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 9998;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+        
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
+        .btn-primary:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-2px); }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 5% auto; padding: 0; width: 90%; max-width: 800px; border-radius: 10px; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Puppy Cursor -->
+    <div class="puppy-cursor" id="puppyCursor"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-paw text-3xl text-green-600 mr-3"></i>
+                    <span class="text-2xl font-bold text-gray-800">Animal Rights</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="about.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="campaigns.html" class="text-green-600 px-3 py-2 rounded-md text-sm font-medium">Campaigns</a>
+                        <a href="donate.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Donate</a>
+                        <a href="contact.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-green-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="about.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">About</a>
+                <a href="campaigns.html" class="text-green-600 block px-3 py-2 rounded-md text-base font-medium">Campaigns</a>
+                <a href="donate.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Donate</a>
+                <a href="contact.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg py-20 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div data-aos="fade-up">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">Our Campaigns</h1>
+                <p class="text-xl md:text-2xl leading-relaxed">Making a difference through focused action and community engagement</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ongoing Campaigns -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Ongoing Campaigns</h2>
+                <p class="text-xl text-gray-600">Active initiatives that need your support</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Wildlife Protection" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Active</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Wildlife Protection Initiative</h3>
+                        <p class="text-gray-600 mb-4">Protecting endangered species and their natural habitats through conservation efforts and community education.</p>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">$15,000 raised</span>
+                            <button onclick="openModal('modal1')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Pet Adoption Drive" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Active</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Pet Adoption Drive</h3>
+                        <p class="text-gray-600 mb-4">Finding loving homes for abandoned and rescued pets in our community through adoption events and awareness campaigns.</p>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">200+ pets adopted</span>
+                            <button onclick="openModal('modal2')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Education Initiative" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Active</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Animal Rights Education</h3>
+                        <p class="text-gray-600 mb-4">Teaching children and adults about animal rights, responsible pet ownership, and wildlife conservation.</p>
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                <span>Progress</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">5,000+ educated</span>
+                            <button onclick="openModal('modal3')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Campaigns -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Past Campaigns</h2>
+                <p class="text-xl text-gray-600">Successful initiatives that made a lasting impact</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Factory Farm Investigation" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Completed</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Factory Farm Investigation</h3>
+                        <p class="text-gray-600 mb-4">Exposed animal cruelty in factory farms and successfully lobbied for stronger animal welfare regulations.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">Policy change achieved</span>
+                            <button onclick="openModal('modal4')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Marine Life Protection" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Completed</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Marine Life Protection</h3>
+                        <p class="text-gray-600 mb-4">Campaign to protect marine ecosystems and reduce plastic pollution affecting sea animals.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">50,000+ signatures</span>
+                            <button onclick="openModal('modal5')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover border border-gray-200" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Emergency Rescue Fund" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Completed</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Emergency Rescue Fund</h3>
+                        <p class="text-gray-600 mb-4">Raised funds for emergency veterinary care and rescue operations during natural disasters.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-600 font-semibold">$50,000 raised</span>
+                            <button onclick="openModal('modal6')" class="text-green-600 hover:text-green-700 font-medium">Learn More →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-green-600 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-4xl font-bold mb-6">Support Our Campaigns</h2>
+                <p class="text-xl mb-8 leading-relaxed">
+                    Every campaign needs community support to succeed. Join us in making a difference for animals worldwide.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="donate.html" class="bg-white text-green-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-donate mr-2"></i>
+                        Donate Now
+                    </a>
+                    <a href="contact.html" class="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-green-600 transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Get Involved
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal1')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Wildlife Protection Initiative</h2>
+                <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Wildlife Protection" class="w-full h-64 object-cover rounded-lg mb-6">
+                <p class="text-gray-600 mb-4">Our Wildlife Protection Initiative focuses on protecting endangered species and their natural habitats through comprehensive conservation efforts.</p>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">What We're Doing:</h3>
+                <ul class="list-disc list-inside text-gray-600 mb-6 space-y-2">
+                    <li>Establishing protected wildlife corridors</li>
+                    <li>Training local communities in conservation practices</li>
+                    <li>Monitoring endangered species populations</li>
+                    <li>Advocating for stronger wildlife protection laws</li>
+                </ul>
+                <div class="flex gap-4">
+                    <a href="donate.html" class="btn-primary text-white px-6 py-3 rounded-full font-semibold">Donate</a>
+                    <button onclick="closeModal('modal1')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal2')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Pet Adoption Drive</h2>
+                <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Pet Adoption" class="w-full h-64 object-cover rounded-lg mb-6">
+                <p class="text-gray-600 mb-4">Our Pet Adoption Drive connects loving families with rescued animals in need of forever homes.</p>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">How You Can Help:</h3>
+                <ul class="list-disc list-inside text-gray-600 mb-6 space-y-2">
+                    <li>Adopt a pet from our rescue center</li>
+                    <li>Foster animals temporarily</li>
+                    <li>Volunteer at adoption events</li>
+                    <li>Share adoption posts on social media</li>
+                </ul>
+                <div class="flex gap-4">
+                    <a href="contact.html" class="btn-primary text-white px-6 py-3 rounded-full font-semibold">Get Involved</a>
+                    <button onclick="closeModal('modal2')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal3')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Animal Rights Education</h2>
+                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                     alt="Education Initiative" class="w-full h-64 object-cover rounded-lg mb-6">
+                <p class="text-gray-600 mb-4">Our education initiative teaches people of all ages about animal rights, responsible pet ownership, and wildlife conservation.</p>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Programs Include:</h3>
+                <ul class="list-disc list-inside text-gray-600 mb-6 space-y-2">
+                    <li>School presentations and workshops</li>
+                    <li>Community awareness campaigns</li>
+                    <li>Online educational resources</li>
+                    <li>Training for animal care professionals</li>
+                </ul>
+                <div class="flex gap-4">
+                    <a href="contact.html" class="btn-primary text-white px-6 py-3 rounded-full font-semibold">Volunteer</a>
+                    <button onclick="closeModal('modal3')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional modals for past campaigns -->
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal4')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Factory Farm Investigation</h2>
+                <p class="text-gray-600 mb-4">Successfully exposed animal cruelty in factory farms and achieved significant policy changes.</p>
+                <div class="flex gap-4">
+                    <button onclick="closeModal('modal4')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal5')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Marine Life Protection</h2>
+                <p class="text-gray-600 mb-4">Campaign to protect marine ecosystems and reduce plastic pollution affecting sea animals.</p>
+                <div class="flex gap-4">
+                    <button onclick="closeModal('modal5')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal6" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <span class="close" onclick="closeModal('modal6')">&times;</span>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Emergency Rescue Fund</h2>
+                <p class="text-gray-600 mb-4">Raised funds for emergency veterinary care and rescue operations during natural disasters.</p>
+                <div class="flex gap-4">
+                    <button onclick="closeModal('modal6')" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-full font-semibold">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-paw text-3xl text-green-400 mr-3"></i>
+                        <span class="text-2xl font-bold">Animal Rights</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Dedicated to protecting and advocating for animal rights worldwide.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-youtube text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="campaigns.html" class="text-gray-400 hover:text-white transition-colors">Campaigns</a></li>
+                        <li><a href="donate.html" class="text-gray-400 hover:text-white transition-colors">Donate</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Get Involved</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Volunteer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fundraise</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Adopt a Pet</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Report Abuse</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i> Poornima University, Jaipur, Rajasthan</p>
+                        <p><i class="fas fa-phone mr-2"></i> +91 7410908869</p>
+                        <p><i class="fas fa-envelope mr-2"></i> Devilalsuthar2006@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Animal Rights & Protection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Puppy cursor effect
+        const puppyCursor = document.getElementById('puppyCursor');
+        let mouseX = 0, mouseY = 0;
+        let puppyX = 0, puppyY = 0;
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            createTrail(mouseX, mouseY);
+        });
+
+        // Smooth puppy following animation
+        function animatePuppy() {
+            const distanceX = mouseX - puppyX;
+            const distanceY = mouseY - puppyY;
+            puppyX += distanceX * 0.1;
+            puppyY += distanceY * 0.1;
+            puppyCursor.style.left = puppyX - 20 + 'px';
+            puppyCursor.style.top = puppyY - 20 + 'px';
+            const angle = Math.atan2(distanceY, distanceX) * (180 / Math.PI);
+            puppyCursor.style.transform = `rotate(${angle}deg)`;
+            requestAnimationFrame(animatePuppy);
+        }
+
+        // Create trail effect
+        function createTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'puppy-trail';
+            trail.style.left = x - 10 + 'px';
+            trail.style.top = y - 10 + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 800);
+        }
+
+        // Initialize puppy position
+        puppyX = window.innerWidth / 2;
+        puppyY = window.innerHeight / 2;
+        puppyCursor.style.left = puppyX - 20 + 'px';
+        puppyCursor.style.top = puppyY - 20 + 'px';
+        animatePuppy();
+
+        // Hide puppy cursor on mobile devices
+        if (window.innerWidth <= 768) {
+            puppyCursor.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        }
+    </script>
+</body>
+</html>

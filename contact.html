@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Animal Rights & Protection</title>
+    <meta name="description" content="Get in touch with us. Contact our team for questions, support, or to report animal abuse. We're here to help.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif;
+            cursor: none; /* Hide default cursor */
+        }
+        
+        /* Puppy cursor effect */
+        .puppy-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23f59e0b" stroke="%23d97706" stroke-width="2"/><circle cx="40" cy="40" r="5" fill="%23374151"/><circle cx="60" cy="40" r="5" fill="%23374151"/><ellipse cx="50" cy="60" rx="8" ry="4" fill="%23374151"/><path d="M30 30 Q50 20 70 30" stroke="%23374151" stroke-width="3" fill="none"/><path d="M25 50 Q35 45 30 60" stroke="%23374151" stroke-width="2" fill="none"/><path d="M75 50 Q65 45 70 60" stroke="%23374151" stroke-width="2" fill="none"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: puppyRun 0.5s infinite alternate;
+        }
+        
+        @keyframes puppyRun {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            100% { transform: translateY(-2px) rotate(2deg); }
+        }
+        
+        /* Puppy trail effect */
+        .puppy-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 9998;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+        
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669); transition: all 0.3s ease; }
+        .btn-primary:hover { background: linear-gradient(135deg, #059669, #047857); transform: translateY(-2px); }
+        .form-input { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .form-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        .contact-card { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-left: 4px solid #10b981; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Puppy Cursor -->
+    <div class="puppy-cursor" id="puppyCursor"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-paw text-3xl text-green-600 mr-3"></i>
+                    <span class="text-2xl font-bold text-gray-800">Animal Rights</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="about.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="campaigns.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Campaigns</a>
+                        <a href="donate.html" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Donate</a>
+                        <a href="contact.html" class="text-green-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-green-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="about.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">About</a>
+                <a href="campaigns.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Campaigns</a>
+                <a href="donate.html" class="text-gray-700 hover:text-green-600 block px-3 py-2 rounded-md text-base font-medium">Donate</a>
+                <a href="contact.html" class="text-green-600 block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg py-20 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <div data-aos="fade-up">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6">Get in Touch</h1>
+                <p class="text-xl md:text-2xl leading-relaxed">We're here to help and answer any questions you may have</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Contact Information</h2>
+                <p class="text-xl text-gray-600">Multiple ways to reach us</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="contact-card p-6 rounded-lg card-hover text-center" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-map-marker-alt text-3xl text-green-600 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Address</h3>
+                    <p class="text-gray-600">Poornima University<br>Jaipur, Rajasthan</p>
+                </div>
+                
+                <div class="contact-card p-6 rounded-lg card-hover text-center" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-phone text-3xl text-green-600 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Phone</h3>
+                    <p class="text-gray-600">+91 7410908869</p>
+                </div>
+                
+                <div class="contact-card p-6 rounded-lg card-hover text-center" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-envelope text-3xl text-green-600 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Email</h3>
+                    <p class="text-gray-600">Devilalsuthar2006@gmail.com</p>
+                </div>
+                
+                <div class="contact-card p-6 rounded-lg card-hover text-center" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-clock text-3xl text-green-600 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Hours</h3>
+                    <p class="text-gray-600">Mon - Fri: 9AM - 6PM<br>Sat: 10AM - 4PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form & Map -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div data-aos="fade-right">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Send us a Message</h2>
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                                <select id="subject" name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none">
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="volunteer">Volunteer Opportunity</option>
+                                    <option value="donation">Donation Question</option>
+                                    <option value="adoption">Pet Adoption</option>
+                                    <option value="abuse">Report Animal Abuse</option>
+                                    <option value="education">Education Program</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                                <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none" placeholder="Tell us how we can help you..."></textarea>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <input type="checkbox" id="newsletter" name="newsletter" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                                <label for="newsletter" class="ml-2 block text-sm text-gray-700">
+                                    Subscribe to our newsletter for updates and news
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="w-full btn-primary text-white py-3 rounded-lg font-semibold">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Map and Additional Info -->
+                <div data-aos="fade-left">
+                    <div class="space-y-8">
+                        <!-- Map -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div class="h-64 bg-gray-200 flex items-center justify-center">
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-map-marked-alt text-4xl mb-2"></i>
+                                    <p>Interactive Map</p>
+                                    <p class="text-sm">Poornima University, Jaipur, Rajasthan</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Emergency Contact -->
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-exclamation-triangle text-2xl text-red-600 mr-3"></i>
+                                <h3 class="text-lg font-semibold text-red-800">Emergency Animal Abuse</h3>
+                            </div>
+                            <p class="text-red-700 mb-4">If you witness animal abuse or cruelty, please contact us immediately:</p>
+                            <div class="space-y-2">
+                                <p class="text-red-700"><i class="fas fa-phone mr-2"></i> +91 7410908869</p>
+                                <p class="text-red-700"><i class="fas fa-envelope mr-2"></i> Devilalsuthar2006@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Media -->
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Follow Us</h3>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition-colors">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-12 h-12 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
+                <p class="text-xl text-gray-600">Quick answers to common questions</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">How can I volunteer with your organization?</h3>
+                    <p class="text-gray-600">You can fill out our volunteer application form on the Donate page, or contact us directly. We have opportunities in animal care, education, events, and digital support.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">What types of animals do you help?</h3>
+                    <p class="text-gray-600">We help all types of animals including dogs, cats, wildlife, farm animals, and exotic animals. Our focus is on rescue, rehabilitation, and finding loving homes.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">How do I report animal abuse?</h3>
+                    <p class="text-gray-600">You can report animal abuse by calling our emergency line at +91 7410908869, emailing us at Devilalsuthar2006@gmail.com, or using our contact form above.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6" data-aos="fade-up" data-aos-delay="400">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Are donations tax-deductible?</h3>
+                    <p class="text-gray-600">Yes, all donations to our organization are tax-deductible. You will receive a receipt for your donation that you can use for tax purposes.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6" data-aos="fade-up" data-aos-delay="500">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Can I visit your facility?</h3>
+                    <p class="text-gray-600">Yes, we welcome visitors! Please contact us in advance to schedule a visit. We offer guided tours and opportunities to meet our rescued animals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-paw text-3xl text-green-400 mr-3"></i>
+                        <span class="text-2xl font-bold">Animal Rights</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Dedicated to protecting and advocating for animal rights worldwide.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-facebook-f text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-twitter text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-instagram text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400 transition-colors"><i class="fab fa-youtube text-xl"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="campaigns.html" class="text-gray-400 hover:text-white transition-colors">Campaigns</a></li>
+                        <li><a href="donate.html" class="text-gray-400 hover:text-white transition-colors">Donate</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Get Involved</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Volunteer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Fundraise</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Adopt a Pet</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Report Abuse</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-map-marker-alt mr-2"></i> Poornima University, Jaipur, Rajasthan</p>
+                        <p><i class="fas fa-phone mr-2"></i> +91 7410908869</p>
+                        <p><i class="fas fa-envelope mr-2"></i> Devilalsuthar2006@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Animal Rights & Protection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Form validation
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (!firstName || !lastName || !email || !subject || !message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // In a real application, this would submit to a server
+            alert('Thank you for your message! We will get back to you within 24 hours.');
+            this.reset();
+        });
+
+        // Puppy cursor effect
+        const puppyCursor = document.getElementById('puppyCursor');
+        let mouseX = 0, mouseY = 0;
+        let puppyX = 0, puppyY = 0;
+
+        // Track mouse movement
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            createTrail(mouseX, mouseY);
+        });
+
+        // Smooth puppy following animation
+        function animatePuppy() {
+            const distanceX = mouseX - puppyX;
+            const distanceY = mouseY - puppyY;
+            puppyX += distanceX * 0.1;
+            puppyY += distanceY * 0.1;
+            puppyCursor.style.left = puppyX - 20 + 'px';
+            puppyCursor.style.top = puppyY - 20 + 'px';
+            const angle = Math.atan2(distanceY, distanceX) * (180 / Math.PI);
+            puppyCursor.style.transform = `rotate(${angle}deg)`;
+            requestAnimationFrame(animatePuppy);
+        }
+
+        // Create trail effect
+        function createTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'puppy-trail';
+            trail.style.left = x - 10 + 'px';
+            trail.style.top = y - 10 + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 800);
+        }
+
+        // Initialize puppy position
+        puppyX = window.innerWidth / 2;
+        puppyY = window.innerHeight / 2;
+        puppyCursor.style.left = puppyX - 20 + 'px';
+        puppyCursor.style.top = puppyY - 20 + 'px';
+        animatePuppy();
+
+        // Hide puppy cursor on mobile devices
+        if (window.innerWidth <= 768) {
+            puppyCursor.style.display = 'none';
+            document.body.style.cursor = 'auto';
+        }
+    </script>
+</body>
+</html>
