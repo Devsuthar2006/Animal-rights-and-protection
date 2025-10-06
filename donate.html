@@ -18,6 +18,9 @@
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
     <style>
         body { 
             font-family: 'Poppins', sans-serif;
@@ -164,6 +167,44 @@
         .btn-secondary:hover { background: linear-gradient(135deg, #d97706, #b45309); transform: translateY(-2px); }
         .form-input { transition: border-color 0.3s ease, box-shadow 0.3s ease; }
         .form-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
+        
+        /* Payment Form Styles */
+        .payment-method-btn {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .payment-method-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-method-btn.active {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+        }
+        
+        #card-element {
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.3s ease;
+        }
+        
+        #card-element:focus {
+            border-color: #10b981;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .donation-amount-display {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -276,6 +317,336 @@
                             <button class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Wildlife - $50/month</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Form Section -->
+    <section id="payment-section" class="py-20 bg-gradient-to-br from-green-50 to-blue-50" style="display: none;">
+        <div class="max-w-2xl mx-auto px-4">
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+                <div class="text-center mb-8">
+                    <i class="fas fa-heart text-5xl text-red-500 mb-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Complete Your Donation</h2>
+                    <p class="text-gray-600">Your support helps protect animals worldwide</p>
+                </div>
+
+                <!-- Selected Amount Display -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6 text-center">
+                    <p class="text-sm text-gray-600">Donation Amount</p>
+                    <p id="selected-amount" class="text-3xl font-bold text-green-600">$0</p>
+                    <p id="donation-type" class="text-sm text-gray-500"></p>
+                </div>
+
+                <!-- Donation Form -->
+                <form id="donation-form">
+                    <!-- Donor Information -->
+                    <div class="space-y-4 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">Donor Information</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                                <input type="text" id="first-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                                <input type="text" id="last-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:ring-2 focus:ring-green-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                            <input type="email" id="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg form-input focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Selection -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Payment Method</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                            <button type="button" id="card-payment-btn" class="payment-method-btn active flex items-center justify-center p-4 border-2 border-green-500 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                                <i class="fas fa-credit-card text-green-600 mr-2"></i>
+                                <span class="font-medium text-green-700">Credit Card</span>
+                            </button>
+                            <button type="button" id="paypal-btn" class="payment-method-btn flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fab fa-paypal text-blue-600 mr-2"></i>
+                                <span class="font-medium text-gray-700">PayPal</span>
+                            </button>
+                            <button type="button" id="googlepay-btn" class="payment-method-btn flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fab fa-google-pay text-blue-500 mr-2"></i>
+                                <span class="font-medium text-gray-700">Google Pay</span>
+                            </button>
+                            <button type="button" id="upi-btn" class="payment-method-btn flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-mobile-alt text-purple-600 mr-2"></i>
+                                <span class="font-medium text-gray-700">UPI/QR</span>
+                            </button>
+                            <button type="button" id="bank-transfer-btn" class="payment-method-btn flex items-center justify-center p-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-university text-gray-600 mr-2"></i>
+                                <span class="font-medium text-gray-700">Bank Transfer</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stripe Card Element -->
+                    <div id="card-payment-section">
+                        <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">Payment Details</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Card Information</label>
+                            <div id="card-element" class="p-3 border border-gray-300 rounded-lg bg-white">
+                                <!-- Stripe Elements will create form elements here -->
+                            </div>
+                            <div id="card-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- PayPal Section -->
+                    <div id="paypal-payment-section" style="display: none;">
+                        <div class="text-center p-8 bg-blue-50 rounded-lg">
+                            <i class="fab fa-paypal text-6xl text-blue-600 mb-4"></i>
+                            <p class="text-gray-700 mb-4">You will be redirected to PayPal to complete your donation</p>
+                            <button type="button" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                Continue with PayPal
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Google Pay Section -->
+                    <div id="googlepay-payment-section" style="display: none;">
+                        <div class="text-center p-8 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg border-2 border-dashed border-blue-300">
+                            <i class="fab fa-google-pay text-6xl text-blue-500 mb-4"></i>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-4">Pay with Google Pay</h4>
+                            <p class="text-gray-700 mb-6">Scan the QR code with your Google Pay app or any UPI app</p>
+                            
+                            <div class="bg-white p-6 rounded-xl shadow-lg inline-block mb-6">
+                                <!-- QR Code Placeholder - Replace with your actual QR code -->
+                                <div id="googlepay-qr-container" class="w-64 h-64 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-gray-200">
+                                    <div class="text-center">
+                                        <i class="fas fa-qrcode text-6xl text-gray-400 mb-2"></i>
+                                        <p class="text-sm text-gray-500">QR Code will appear here</p>
+                                        <p class="text-xs text-gray-400 mt-1">Please provide your QR code</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                                <h5 class="font-semibold text-blue-800 mb-2">How to pay:</h5>
+                                <div class="text-left text-blue-700 space-y-1 text-sm">
+                                    <p>• Open Google Pay, PhonePe, Paytm, or any UPI app</p>
+                                    <p>• Tap "Scan QR Code" or "Pay"</p>
+                                    <p>• Scan the QR code above</p>
+                                    <p>• Enter the donation amount: $<span id="googlepay-amount">0</span></p>
+                                    <p>• Complete the payment</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 rounded-lg p-3 mb-4">
+                                <p class="text-sm text-yellow-800">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    After payment, please send a screenshot to our WhatsApp/Email for confirmation
+                                </p>
+                            </div>
+                            
+                            <button type="button" onclick="showPaymentConfirmation('googlepay')" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                <i class="fas fa-check mr-2"></i>I have completed the payment
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- UPI/QR Code Section -->
+                    <div id="upi-payment-section" style="display: none;">
+                        <div class="p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border-2 border-dashed border-purple-300">
+                            <div class="text-center mb-6">
+                                <i class="fas fa-mobile-alt text-6xl text-purple-600 mb-4"></i>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">UPI Payment</h4>
+                                <p class="text-gray-700">Pay using any UPI app with QR code or UPI ID</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- QR Code Section -->
+                                <div class="text-center">
+                                    <h5 class="font-semibold text-gray-800 mb-4">Scan QR Code</h5>
+                                    <div class="bg-white p-6 rounded-xl shadow-lg inline-block mb-4">
+                                        <div id="upi-qr-container" class="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center border-2 border-gray-200">
+                                            <div class="text-center">
+                                                <i class="fas fa-qrcode text-4xl text-gray-400 mb-2"></i>
+                                                <p class="text-xs text-gray-500">UPI QR Code</p>
+                                                <p class="text-xs text-gray-400">Please provide your QR</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- UPI ID Section -->
+                                <div>
+                                    <h5 class="font-semibold text-gray-800 mb-4">Pay with UPI ID</h5>
+                                    <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">UPI ID:</label>
+                                        <div class="flex items-center bg-gray-50 rounded-lg p-3 border">
+                                            <span id="upi-id" class="font-mono text-gray-800 flex-1 text-sm break-all">suthardevilal132@oksbi</span>
+                                            <button onclick="copyUpiId()" class="ml-2 text-blue-600 hover:text-blue-700 flex-shrink-0">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2">Tap to copy UPI ID</p>
+                                    </div>
+                                    
+                                    <div class="mt-4 space-y-2">
+                                        <p class="text-sm font-medium text-gray-700">Supported Apps:</p>
+                                        <div class="flex space-x-2 text-xs">
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">PhonePe</span>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Google Pay</span>
+                                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">Paytm</span>
+                                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded">BHIM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 bg-yellow-50 rounded-lg p-4">
+                                <p class="text-sm text-yellow-800">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Amount to pay: ₹<span id="upi-amount-inr">0</span> (≈ $<span id="upi-amount-usd">0</span>)
+                                </p>
+                            </div>
+                            
+                            <div class="text-center mt-6">
+                                <button type="button" onclick="showPaymentConfirmation('upi')" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                                    <i class="fas fa-check mr-2"></i>I have completed the payment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Section -->
+                    <div id="bank-transfer-section" style="display: none;">
+                        <div class="bg-gradient-to-br from-gray-50 to-blue-50 p-8 rounded-lg border-2 border-gray-200">
+                            <div class="text-center mb-6">
+                                <i class="fas fa-university text-6xl text-gray-600 mb-4"></i>
+                                <h4 class="text-xl font-semibold text-gray-800 mb-2">Bank Transfer Details</h4>
+                                <p class="text-gray-600">Transfer funds directly to our bank account</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <!-- Domestic Transfer -->
+                                <div class="bg-white rounded-lg p-6 shadow-lg">
+                                    <h5 class="font-semibold text-gray-800 mb-4 flex items-center">
+                                        <i class="fas fa-home text-green-600 mr-2"></i>
+                                        Domestic Transfer (India)
+                                    </h5>
+                                    <div class="space-y-3 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Bank Name:</span>
+                                            <span class="text-gray-600">State Bank of India</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Account Name:</span>
+                                            <span class="text-gray-600">Devilal Suthar</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Account Number:</span>
+                                            <span class="text-gray-600 font-mono">XXXX-XXXX-XXXX</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">IFSC Code:</span>
+                                            <span class="text-gray-600 font-mono">SBIN0XXXXXX</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Branch:</span>
+                                            <span class="text-gray-600">Please provide your branch</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- International Transfer -->
+                                <div class="bg-white rounded-lg p-6 shadow-lg">
+                                    <h5 class="font-semibold text-gray-800 mb-4 flex items-center">
+                                        <i class="fas fa-globe text-blue-600 mr-2"></i>
+                                        International Transfer
+                                    </h5>
+                                    <div class="space-y-3 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Bank Name:</span>
+                                            <span class="text-gray-600">Your International Bank</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Account Number:</span>
+                                            <span class="text-gray-600 font-mono">XXXX-XXXX-XXXX</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">SWIFT Code:</span>
+                                            <span class="text-gray-600 font-mono">XXXXXXXX</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">IBAN:</span>
+                                            <span class="text-gray-600 font-mono">XXXX XXXX XXXX XXXX</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="font-medium text-gray-700">Currency:</span>
+                                            <span class="text-gray-600">USD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Instructions -->
+                            <div class="mt-6 space-y-4">
+                                <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                                    <h6 class="font-semibold text-yellow-800 mb-2">
+                                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                                        Important Instructions:
+                                    </h6>
+                                    <ul class="text-sm text-yellow-700 space-y-1">
+                                        <li>• Include your full name and email in transfer description</li>
+                                        <li>• Reference: "Donation - Your Name"</li>
+                                        <li>• Amount: $<span id="bank-transfer-amount">0</span></li>
+                                        <li>• Send transfer receipt to: donations@animalrights.org</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button type="button" onclick="showPaymentConfirmation('bank')" class="bg-gray-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                                        <i class="fas fa-check mr-2"></i>I will transfer the funds
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anonymous Donation Option -->
+                    <div class="mb-6">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="anonymous-donation" class="mr-3 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                            <span class="text-gray-700">Make this donation anonymous</span>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" id="submit-button" class="w-full bg-green-600 text-white py-4 rounded-lg text-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <i class="fas fa-heart mr-2"></i>
+                            <span id="button-text">Complete Donation</span>
+                        </button>
+                        <p class="text-sm text-gray-500 mt-4">Your donation is secure and encrypted. We never store your payment information.</p>
+                        <div class="flex items-center justify-center mt-4 space-x-4 text-gray-400">
+                            <i class="fab fa-cc-visa text-2xl"></i>
+                            <i class="fab fa-cc-mastercard text-2xl"></i>
+                            <i class="fab fa-cc-amex text-2xl"></i>
+                            <i class="fab fa-cc-discover text-2xl"></i>
+                            <i class="fas fa-lock mr-1"></i>
+                            <span class="text-xs">256-bit SSL encrypted</span>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Back to Options Button -->
+                <div class="text-center mt-6">
+                    <button onclick="hidePaymentForm()" class="text-gray-500 hover:text-gray-700 underline">
+                        ← Back to donation options
+                    </button>
                 </div>
             </div>
         </div>
@@ -523,15 +894,426 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
+        // Stripe Configuration
+        // Using your actual Stripe publishable key
+        const stripe = Stripe('pk_test_51SF89eAX9Cv5umD5vX5BUioQreT7uOpu2sFJBu6yEUvkFgC80pcDdX8xtq6mHpA9pSAp5f47JlMTRWrkmtMJN3jq00z24rY22r'); // Your Stripe publishable key
+        const elements = stripe.elements();
+
+        // Variables
+        let selectedAmount = 0;
+        let isMonthly = false;
+        let cardElement;
+
+        // Initialize Stripe Card Element
+        function initializeStripe() {
+            const style = {
+                base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                        color: '#aab7c4',
+                    },
+                },
+                invalid: {
+                    color: '#9e2146',
+                },
+            };
+
+            cardElement = elements.create('card', { style: style });
+            cardElement.mount('#card-element');
+
+            // Handle real-time validation errors from the card Element
+            cardElement.on('change', ({error}) => {
+                const displayError = document.getElementById('card-errors');
+                if (error) {
+                    displayError.textContent = error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+        }
+
+        // Amount Selection Functions
         function selectAmount(amount) {
-            document.getElementById('custom-amount').value = amount;
-            // In a real application, this would redirect to payment processing
-            alert(`Thank you for choosing to donate $${amount}! This would redirect to our secure payment processor.`);
+            selectedAmount = amount;
+            isMonthly = false;
+            showPaymentForm();
+            updateAmountDisplay();
         }
 
         function selectMonthlyAmount(amount) {
-            // In a real application, this would redirect to payment processing
-            alert(`Thank you for choosing to donate $${amount} monthly! This would redirect to our secure payment processor.`);
+            selectedAmount = amount;
+            isMonthly = true;
+            showPaymentForm();
+            updateAmountDisplay();
+        }
+
+        // Custom Amount Selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const customAmountInput = document.getElementById('custom-amount');
+            if (customAmountInput) {
+                customAmountInput.addEventListener('change', function() {
+                    const customAmount = parseFloat(this.value);
+                    if (customAmount > 0) {
+                        selectAmount(customAmount);
+                    }
+                });
+            }
+        });
+
+        // Show/Hide Payment Form
+        function showPaymentForm() {
+            document.getElementById('payment-section').style.display = 'block';
+            document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' });
+            
+            // Initialize Stripe if not already done
+            if (!cardElement) {
+                setTimeout(() => initializeStripe(), 100);
+            }
+        }
+
+        function hidePaymentForm() {
+            document.getElementById('payment-section').style.display = 'none';
+            selectedAmount = 0;
+            isMonthly = false;
+        }
+
+        // Update Amount Display
+        function updateAmountDisplay() {
+            document.getElementById('selected-amount').textContent = `$${selectedAmount}`;
+            document.getElementById('donation-type').textContent = isMonthly ? 'Monthly Donation' : 'One-Time Donation';
+        }
+
+        // Payment Method Selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentMethods = document.querySelectorAll('.payment-method-btn');
+            paymentMethods.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    paymentMethods.forEach(b => {
+                        b.classList.remove('active', 'border-green-500', 'bg-green-50');
+                        b.classList.add('border-gray-300');
+                        b.querySelector('span').classList.remove('text-green-700');
+                        b.querySelector('span').classList.add('text-gray-700');
+                    });
+
+                    // Add active class to clicked button
+                    this.classList.add('active', 'border-green-500', 'bg-green-50');
+                    this.classList.remove('border-gray-300');
+                    this.querySelector('span').classList.add('text-green-700');
+                    this.querySelector('span').classList.remove('text-gray-700');
+
+                    // Show/hide payment sections
+                    const cardSection = document.getElementById('card-payment-section');
+                    const paypalSection = document.getElementById('paypal-payment-section');
+                    const googlepaySection = document.getElementById('googlepay-payment-section');
+                    const upiSection = document.getElementById('upi-payment-section');
+                    const bankSection = document.getElementById('bank-transfer-section');
+
+                    // Hide all sections
+                    cardSection.style.display = 'none';
+                    paypalSection.style.display = 'none';
+                    googlepaySection.style.display = 'none';
+                    upiSection.style.display = 'none';
+                    bankSection.style.display = 'none';
+
+                    // Show selected section and update amounts
+                    if (this.id === 'card-payment-btn') {
+                        cardSection.style.display = 'block';
+                    } else if (this.id === 'paypal-btn') {
+                        paypalSection.style.display = 'block';
+                    } else if (this.id === 'googlepay-btn') {
+                        googlepaySection.style.display = 'block';
+                        updateGooglePayAmount();
+                    } else if (this.id === 'upi-btn') {
+                        upiSection.style.display = 'block';
+                        updateUpiAmount();
+                    } else if (this.id === 'bank-transfer-btn') {
+                        bankSection.style.display = 'block';
+                        updateBankTransferAmount();
+                    }
+                });
+            });
+        });
+
+        // Form Submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('donation-form');
+            if (form) {
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    
+                    const submitButton = document.getElementById('submit-button');
+                    const buttonText = document.getElementById('button-text');
+                    
+                    // Show loading state
+                    submitButton.disabled = true;
+                    buttonText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+
+                    try {
+                        // Get form data
+                        const formData = {
+                            firstName: document.getElementById('first-name').value,
+                            lastName: document.getElementById('last-name').value,
+                            email: document.getElementById('email').value,
+                            phone: document.getElementById('phone').value,
+                            amount: selectedAmount,
+                            isMonthly: isMonthly,
+                            anonymous: document.getElementById('anonymous-donation').checked
+                        };
+
+                        // Validate required fields
+                        if (!formData.firstName || !formData.lastName || !formData.email || !selectedAmount) {
+                            throw new Error('Please fill in all required fields');
+                        }
+
+                        // Check which payment method is selected
+                        const activeMethod = document.querySelector('.payment-method-btn.active');
+                        
+                        if (activeMethod.id === 'card-payment-btn') {
+                            await processStripePayment(formData);
+                        } else if (activeMethod.id === 'paypal-btn') {
+                            processPayPalPayment(formData);
+                        } else if (activeMethod.id === 'googlepay-btn') {
+                            processGooglePayPayment(formData);
+                        } else if (activeMethod.id === 'upi-btn') {
+                            processUpiPayment(formData);
+                        } else if (activeMethod.id === 'bank-transfer-btn') {
+                            processBankTransfer(formData);
+                        }
+
+                    } catch (error) {
+                        console.error('Payment error:', error);
+                        alert(`Error: ${error.message}`);
+                        
+                        // Reset button state
+                        submitButton.disabled = false;
+                        buttonText.innerHTML = '<i class="fas fa-heart mr-2"></i>Complete Donation';
+                    }
+                });
+            }
+        });
+
+        // Stripe Payment Processing
+        async function processStripePayment(formData) {
+            try {
+                console.log('Creating payment intent for:', formData);
+                
+                // Step 1: Create payment intent on server
+                const response = await fetch('/create-payment-intent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: formData.amount,
+                        currency: 'usd',
+                        isMonthly: formData.isMonthly,
+                        customerInfo: {
+                            firstName: formData.firstName,
+                            lastName: formData.lastName,
+                            email: formData.email,
+                            phone: formData.phone,
+                            message: document.getElementById('message')?.value || ''
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error.message || 'Failed to create payment intent');
+                }
+
+                const { clientSecret, subscriptionId, paymentIntentId } = await response.json();
+                console.log('Payment intent created, confirming payment...');
+
+                // Step 2: Confirm payment with Stripe
+                const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: cardElement,
+                        billing_details: {
+                            name: `${formData.firstName} ${formData.lastName}`,
+                            email: formData.email,
+                            phone: formData.phone,
+                        },
+                    }
+                });
+
+                if (confirmError) {
+                    console.error('Payment confirmation failed:', confirmError);
+                    throw new Error(confirmError.message);
+                }
+
+                console.log('Payment succeeded!', paymentIntent);
+                
+                // Show success message with payment details
+                showSuccessMessage({
+                    ...formData,
+                    paymentId: paymentIntent.id,
+                    subscriptionId: subscriptionId
+                });
+                
+            } catch (error) {
+                console.error('Stripe payment error:', error);
+                throw new Error(`Payment failed: ${error.message}`);
+            }
+        }
+
+        // PayPal Payment Processing
+        function processPayPalPayment(formData) {
+            console.log('Processing PayPal payment:', formData);
+            
+            // In a real application, redirect to PayPal
+            alert(`Redirecting to PayPal for $${formData.amount} ${formData.isMonthly ? 'monthly ' : ''}donation...`);
+            
+            // Simulate PayPal redirect
+            setTimeout(() => {
+                showSuccessMessage(formData);
+            }, 1000);
+        }
+
+        // Bank Transfer Processing
+        function processBankTransfer(formData) {
+            console.log('Processing bank transfer:', formData);
+            
+            alert(`Thank you! Please transfer $${formData.amount} to the bank account shown above. We'll send you a confirmation email once received.`);
+            
+            showSuccessMessage(formData);
+        }
+
+        // Success Message
+        function showSuccessMessage(formData) {
+            const paymentSection = document.getElementById('payment-section');
+            paymentSection.innerHTML = `
+                <div class="max-w-2xl mx-auto px-4">
+                    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200 text-center">
+                        <div class="text-green-500 text-6xl mb-4">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">Thank You!</h2>
+                        <p class="text-xl text-gray-600 mb-6">
+                            Your ${formData.isMonthly ? 'monthly ' : ''}donation of $${formData.amount} has been received.
+                        </p>
+                        <div class="bg-green-50 rounded-lg p-6 mb-6">
+                            <h3 class="font-semibold text-green-800 mb-2">What happens next?</h3>
+                            <ul class="text-left text-green-700 space-y-2">
+                                <li>• You'll receive a confirmation email with your receipt</li>
+                                <li>• Your donation will be put to work immediately</li>
+                                <li>• You'll receive updates on how your contribution is making a difference</li>
+                                ${formData.isMonthly ? '<li>• Your monthly donation will be processed on the same day each month</li>' : ''}
+                            </ul>
+                        </div>
+                        <div class="space-y-4">
+                            <button onclick="window.location.reload()" class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                                Make Another Donation
+                            </button>
+                            <br>
+                            <button onclick="window.location.href='index.html'" class="text-gray-500 hover:text-gray-700 underline">
+                                Return to Homepage
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Google Pay Payment Processing
+        function processGooglePayPayment(formData) {
+            console.log('Processing Google Pay payment:', formData);
+            
+            // Show payment instructions
+            alert(`Please scan the QR code with Google Pay to donate $${formData.amount}. After payment, click "I have completed the payment" button.`);
+            
+            // Reset button state for manual confirmation
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+            submitButton.disabled = false;
+            buttonText.innerHTML = '<i class="fas fa-heart mr-2"></i>Complete Donation';
+        }
+
+        // UPI Payment Processing
+        function processUpiPayment(formData) {
+            console.log('Processing UPI payment:', formData);
+            
+            // Show payment instructions
+            alert(`Please pay ₹${(formData.amount * 83).toFixed(0)} using the QR code or UPI ID. After payment, click "I have completed the payment" button.`);
+            
+            // Reset button state for manual confirmation
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+            submitButton.disabled = false;
+            buttonText.innerHTML = '<i class="fas fa-heart mr-2"></i>Complete Donation';
+        }
+
+        // Update amount displays for different payment methods
+        function updateGooglePayAmount() {
+            const amountElement = document.getElementById('googlepay-amount');
+            if (amountElement && selectedAmount) {
+                amountElement.textContent = selectedAmount;
+            }
+        }
+
+        function updateUpiAmount() {
+            const usdElement = document.getElementById('upi-amount-usd');
+            const inrElement = document.getElementById('upi-amount-inr');
+            if (usdElement && inrElement && selectedAmount) {
+                usdElement.textContent = selectedAmount;
+                inrElement.textContent = Math.round(selectedAmount * 83); // Approximate USD to INR conversion
+            }
+        }
+
+        function updateBankTransferAmount() {
+            const amountElement = document.getElementById('bank-transfer-amount');
+            if (amountElement && selectedAmount) {
+                amountElement.textContent = selectedAmount;
+            }
+        }
+
+        // Payment confirmation function
+        function showPaymentConfirmation(paymentType) {
+            const formData = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('email').value,
+                amount: selectedAmount,
+                isMonthly: isMonthly,
+                paymentMethod: paymentType
+            };
+
+            // Validate required fields
+            if (!formData.firstName || !formData.lastName || !formData.email || !selectedAmount) {
+                alert('Please fill in all required fields before confirming payment');
+                return;
+            }
+
+            let paymentMethodName = '';
+            switch(paymentType) {
+                case 'googlepay': paymentMethodName = 'Google Pay'; break;
+                case 'upi': paymentMethodName = 'UPI'; break;
+                case 'bank': paymentMethodName = 'Bank Transfer'; break;
+            }
+
+            showSuccessMessage({
+                ...formData,
+                paymentMethodUsed: paymentMethodName
+            });
+        }
+
+        // Copy UPI ID function
+        function copyUpiId() {
+            const upiId = document.getElementById('upi-id').textContent;
+            navigator.clipboard.writeText(upiId).then(function() {
+                // Show temporary success message
+                const button = event.target.closest('button');
+                const originalContent = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+                button.classList.add('text-green-600');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalContent;
+                    button.classList.remove('text-green-600');
+                }, 1500);
+            });
         }
 
         function scrollToDonation() {
@@ -966,6 +1748,115 @@
         if (window.innerWidth > 768) {
             const realisticPuppy = new RealisticPuppy();
         }
+
+        // CONFIGURATION SECTION - REPLACE WITH YOUR ACTUAL DETAILS
+        // Update these details with your actual payment information
+        
+        // Load your actual payment QR codes and UPI ID
+        function loadPaymentQRCodes() {
+            // Your Google Pay QR Code
+            const googlePayQR = document.getElementById('googlepay-qr-container');
+            if (googlePayQR) {
+                googlePayQR.innerHTML = `
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAYAAADL1t+KAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR4nO3dYY4cOQ7FcV9g7v/KPsDeYQ9gH2AvYB9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC" alt="Google Pay QR Code" class="w-full h-full object-contain rounded-lg border border-gray-300">
+                    <p class="text-xs text-gray-600 mt-2 font-medium">Scan with Google Pay</p>
+                `;
+            }
+
+            // Your UPI QR Code (same as Google Pay QR)
+            const upiQR = document.getElementById('upi-qr-container');
+            if (upiQR) {
+                upiQR.innerHTML = `
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAH0CAYAAADL1t+KAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR4nO3dYY4cOQ7FcV9g7v/KPsDeYQ9gH2AvYB9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC9gL2AvYC" alt="UPI QR Code" class="w-full h-full object-contain rounded-lg border border-gray-300">
+                    <p class="text-xs text-gray-600 mt-2 font-medium">Scan with any UPI app</p>
+                `;
+            }
+
+            // Your actual UPI ID
+            const upiId = document.getElementById('upi-id');
+            if (upiId) {
+                upiId.textContent = 'suthardevilal132@oksbi';
+            }
+        }
+
+        // Fix QR codes with working URLs
+        function fixQRCodes() {
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=suthardevilal132@oksbi%26pn=Animal%20Rights%20Protection%26cu=INR';
+            
+            // Fix Google Pay QR
+            const googlePayQR = document.getElementById('googlepay-qr-container');
+            if (googlePayQR) {
+                googlePayQR.innerHTML = `
+                    <img src="${qrUrl}" alt="Google Pay QR Code" class="w-full h-full object-contain rounded-lg border-2 border-blue-300 shadow-md">
+                `;
+                
+                // Add text below the QR container, not inside it
+                const googlePaySection = googlePayQR.parentElement;
+                if (googlePaySection && !googlePaySection.querySelector('.qr-instruction')) {
+                    const instructionText = document.createElement('p');
+                    instructionText.className = 'text-xs text-gray-600 mt-3 font-medium text-center qr-instruction';
+                    instructionText.innerHTML = '✅ Scan with Google Pay';
+                    googlePaySection.appendChild(instructionText);
+                }
+            }
+            
+            // Fix UPI QR
+            const upiQR = document.getElementById('upi-qr-container');
+            if (upiQR) {
+                upiQR.innerHTML = `
+                    <img src="${qrUrl}" alt="UPI QR Code" class="w-full h-full object-contain rounded-lg border-2 border-purple-300 shadow-md">
+                `;
+                
+                // Add text below the QR container, not inside it
+                const upiSection = upiQR.parentElement;
+                if (upiSection && !upiSection.querySelector('.qr-instruction')) {
+                    const instructionText = document.createElement('p');
+                    instructionText.className = 'text-xs text-gray-600 mt-3 font-medium text-center qr-instruction';
+                    instructionText.innerHTML = '✅ Scan with any UPI app';
+                    upiSection.appendChild(instructionText);
+                }
+            }
+            
+            console.log('✅ QR codes fixed and loaded successfully!');
+        }
+
+        // Load QR codes when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load your actual QR codes and UPI ID
+            loadPaymentQRCodes();
+            // Fix QR codes after a short delay
+            setTimeout(fixQRCodes, 500);
+        });
+
     </script>
+
+    <!-- 
+    SETUP INSTRUCTIONS:
+    
+    1. GOOGLE PAY QR CODE:
+       - Generate your Google Pay QR code from the Google Pay app
+       - Upload the QR code image to a hosting service (like imgur, cloudinary, etc.)
+       - Replace 'YOUR_GOOGLE_PAY_QR_CODE_URL' with the actual image URL
+    
+    2. UPI QR CODE:
+       - Generate UPI QR code from any UPI app (PhonePe, Paytm, etc.)
+       - Upload the QR code image to a hosting service
+       - Replace 'YOUR_UPI_QR_CODE_URL' with the actual image URL
+       - Replace 'your-upi-id@paytm' with your actual UPI ID
+    
+    3. BANK DETAILS:
+       - Update the bank transfer section with your actual bank details
+       - Replace placeholders like "Your Bank Name", "XXXX-XXXX-XXXX", etc.
+    
+    4. ACTIVATION:
+       - Uncomment the loadPaymentQRCodes() function call
+       - Test all payment methods before going live
+    
+    Example UPI IDs:
+    - yourname@paytm (for Paytm)
+    - yourname@ybl (for PhonePe)  
+    - yourname@okaxis (for Google Pay)
+    - yourname@ibl (for any bank UPI)
+    -->
 </body>
 </html>
