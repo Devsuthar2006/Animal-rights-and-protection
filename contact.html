@@ -21,7 +21,7 @@
     <style>
         body { 
             font-family: 'Poppins', sans-serif;
-            cursor: none; /* Hide default cursor */
+            /* Normal cursor visible, puppy follows but doesn't replace it */
         }
         
         /* Realistic 3D Virtual Golden Retriever Puppy */
@@ -498,234 +498,405 @@
             this.reset();
         });
 
-        // Realistic 3D Virtual Golden Retriever Puppy System
-        class VirtualGoldenRetriever {
+        // Enhanced Realistic Physics-Based 3D Golden Retriever Puppy System
+        class RealisticPuppy {
             constructor() {
-                this.x = 0;
-                this.y = 0;
-                this.targetX = 0;
-                this.targetY = 0;
+                this.element = document.getElementById('puppyCursor');
+                
+                // Physics properties with realistic constraints
+                this.position = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
                 this.velocity = { x: 0, y: 0 };
-                this.maxSpeed = 3;
-                this.acceleration = 0.15;
-                this.friction = 0.85;
+                this.acceleration = { x: 0, y: 0 };
+                this.target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+                
+                // Realistic puppy characteristics
+                this.maxWalkSpeed = 3.5;      // Realistic puppy walking speed  
+                this.maxRunSpeed = 12;         // When excited or far from target
+                this.currentSpeed = 0;
+                this.energy = 100;             // Affects speed and behavior (0-100)
+                this.excitement = 0;           // How interested in following cursor (0-100)
+                
+                // Movement states with realistic physics
+                this.movementState = 'idle';   // 'idle', 'trotting', 'walking', 'running'
+                this.direction = 'front';      // 'front', 'left', 'right', 'back'
                 
                 // Natural behavior system
-                this.isIdle = true;
-                this.lastMouseMove = Date.now();
-                this.idleStartTime = Date.now();
-                this.currentBehavior = 'idle';
+                this.behavior = 'idle';
                 this.behaviorTimer = 0;
-                this.behaviorDuration = 0;
-                this.direction = 'front';
-                this.lastDirection = 'front';
-                this.frameCounter = 0;
+                this.behaviorDuration = 180;   // frames (3 seconds at 60fps)  
+                this.isFollowingCursor = false;
+                this.distanceFromCursor = 0;
+                this.reactionTime = 0;         // Realistic reaction delay
                 
-                // Movement tracking
-                this.isMoving = false;
-                this.speed = 0;
-                this.previousX = 0;
-                this.previousY = 0;
+                // Personality traits that affect behavior
+                this.personalityTraits = {
+                    playfulness: 0.7 + Math.random() * 0.3,  // 0.7-1.0
+                    curiosity: 0.6 + Math.random() * 0.4,    // 0.6-1.0  
+                    loyalty: 0.8 + Math.random() * 0.2,      // 0.8-1.0
+                    energy_level: 0.6 + Math.random() * 0.4  // 0.6-1.0
+                };
                 
-                this.createPuppyElement();
-                this.bindEvents();
-                this.startBehaviorSystem();
+                // Animation system
+                this.animationFrame = 0;
+                this.walkCycle = 0;
+                this.lastUpdate = performance.now();
+                
+                // Enhanced behavior set
+                this.behaviors = ['idle', 'sniff', 'stretch', 'tail-wag', 'play', 'curious', 'sit', 'look-around', 'scratch', 'yawn'];
+                
+                this.init();
             }
             
-            createPuppyElement() {
-                if (window.innerWidth <= 768) return; // Disable on mobile
-                
-                this.element = document.createElement('div');
-                this.element.className = 'puppy-cursor puppy-front-idle puppy-breathing-anim';
-                document.body.appendChild(this.element);
-            }
-            
-            bindEvents() {
-                if (window.innerWidth <= 768) return; // Disable on mobile
-                
-                document.addEventListener('mousemove', (e) => {
-                    this.targetX = e.clientX - 40;
-                    this.targetY = e.clientY - 30;
-                    this.lastMouseMove = Date.now();
-                    this.isIdle = false;
-                });
-            }
-            
-            updatePhysics() {
-                // Calculate distance to target
-                const dx = this.targetX - this.x;
-                const dy = this.targetY - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                // Apply acceleration toward target
-                if (distance > 2) {
-                    this.velocity.x += dx * this.acceleration * 0.001;
-                    this.velocity.y += dy * this.acceleration * 0.001;
+            init() {
+                if (window.innerWidth <= 768) {
+                    this.element.style.display = 'none';
+                    return;
                 }
                 
-                // Limit speed
-                const currentSpeed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
-                if (currentSpeed > this.maxSpeed) {
-                    this.velocity.x = (this.velocity.x / currentSpeed) * this.maxSpeed;
-                    this.velocity.y = (this.velocity.y / currentSpeed) * this.maxSpeed;
+                document.addEventListener('mousemove', (e) => this.handleMouseMovement(e));
+                this.startAnimationLoop();
+                
+                // Initial setup
+                this.element.style.left = this.position.x + 'px';
+                this.element.style.top = this.position.y + 'px';
+            }
+            
+            handleMouseMovement(e) {
+                if (window.innerWidth <= 768) return;
+                
+                // Calculate distance with realistic detection 
+                const dx = e.clientX - this.position.x;
+                const dy = e.clientY - this.position.y;
+                this.distanceFromCursor = Math.sqrt(dx * dx + dy * dy);
+                
+                // Puppy takes realistic time to notice cursor movement
+                if (!this.isFollowingCursor && this.reactionTime <= 0) {
+                    this.reactionTime = 8 + Math.random() * 15; // 0.13-0.38 seconds
+                    this.excitement = Math.min(this.excitement + (20 * this.personalityTraits.loyalty), 100);
+                }
+                
+                // Natural offset so puppy doesn't cover cursor
+                const offsetDistance = 40 + Math.random() * 30;
+                const offsetAngle = (Math.random() - 0.5) * Math.PI;
+                this.target.x = e.clientX + Math.cos(offsetAngle) * offsetDistance;
+                this.target.y = e.clientY + Math.sin(offsetAngle) * offsetDistance;
+                
+                // Reset following timeout with personality-based duration
+                const followDuration = 1200 + (this.personalityTraits.loyalty * 1200);
+                clearTimeout(this.followTimeout);
+                this.followTimeout = setTimeout(() => {
+                    this.isFollowingCursor = false;
+                    this.excitement = Math.max(this.excitement - 8, 0);
+                }, followDuration);
+            }
+            
+            updatePhysics(deltaTime) {
+                const dt = deltaTime / 16.67;
+                
+                // Update reaction time
+                if (this.reactionTime > 0) {
+                    this.reactionTime -= dt;
+                    if (this.reactionTime <= 0) {
+                        this.isFollowingCursor = true;
+                        this.behavior = 'following';
+                    }
+                }
+                
+                this.calculateRealisticForces();
+                this.updateMovement(dt);
+                this.updateBehavior(dt);
+                this.updateDirection();
+                this.updateAnimation();
+                this.manageEnergy(dt);
+            }
+            
+            calculateRealisticForces() {
+                const dx = this.target.x - this.position.x;
+                const dy = this.target.y - this.position.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (this.isFollowingCursor && distance > 20) {
+                    // Realistic puppy following - speed based on distance like real puppies
+                    let desiredSpeed;
+                    let urgency = 1;
+                    
+                    // Determine gait based on distance - puppies naturally adjust speed
+                    if (distance > 200) {
+                        desiredSpeed = this.maxRunSpeed * this.personalityTraits.energy_level;
+                        urgency = 1.5;
+                        this.movementState = 'running';
+                        this.excitement = Math.min(this.excitement + 0.5, 100);
+                    } else if (distance > 80) {
+                        desiredSpeed = (this.maxWalkSpeed + this.maxRunSpeed) * 0.55;
+                        urgency = 1.1; 
+                        this.movementState = 'trotting';
+                    } else if (distance > 35) {
+                        desiredSpeed = this.maxWalkSpeed * (0.7 + this.excitement / 400);
+                        urgency = 0.9;
+                        this.movementState = 'walking';
+                    } else {
+                        desiredSpeed = this.maxWalkSpeed * 0.25;
+                        urgency = 0.5;
+                        this.movementState = 'walking';
+                    }
+                    
+                    // Apply energy and excitement modifiers
+                    desiredSpeed *= (this.energy / 100) * (0.6 + this.excitement / 300);
+                    
+                    // Calculate desired velocity with realistic physics
+                    const desiredVelocityX = (dx / distance) * desiredSpeed * urgency;
+                    const desiredVelocityY = (dy / distance) * desiredSpeed * urgency;
+                    
+                    // Apply forces with natural acceleration
+                    const accelerationForce = 0.12 + (this.excitement / 700) + (distance / 2000);
+                    this.acceleration.x = (desiredVelocityX - this.velocity.x) * accelerationForce;
+                    this.acceleration.y = (desiredVelocityY - this.velocity.y) * accelerationForce;
+                    
+                    // Playful movement variations
+                    if (this.personalityTraits.playfulness > 0.8 && this.excitement > 60 && Math.random() < 0.015) {
+                        this.acceleration.x += (Math.random() - 0.5) * 2.5;
+                        this.acceleration.y += (Math.random() - 0.5) * 2.5;
+                    }
+                    
+                } else {
+                    // Natural stopping with realistic deceleration
+                    const friction = 0.08 + (this.energy / 1500);
+                    this.acceleration.x = -this.velocity.x * friction;
+                    this.acceleration.y = -this.velocity.y * friction;
+                    
+                    if (this.currentSpeed < 0.2) {
+                        this.movementState = 'idle';
+                    }
+                }
+            }
+            
+            updateMovement(dt) {
+                // Apply acceleration with momentum
+                this.velocity.x += this.acceleration.x * dt;
+                this.velocity.y += this.acceleration.y * dt;
+                
+                // Realistic speed limiting based on gait
+                this.currentSpeed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+                let maxSpeed = this.maxWalkSpeed;
+                
+                switch (this.movementState) {
+                    case 'running':
+                        maxSpeed = this.maxRunSpeed;
+                        break;
+                    case 'trotting':
+                        maxSpeed = (this.maxWalkSpeed + this.maxRunSpeed) * 0.6;
+                        break;
+                    case 'walking':
+                        maxSpeed = this.maxWalkSpeed;
+                        break;
+                }
+                
+                if (this.currentSpeed > maxSpeed) {
+                    const scale = maxSpeed / this.currentSpeed;
+                    this.velocity.x *= scale;
+                    this.velocity.y *= scale;
+                    this.currentSpeed = maxSpeed;
                 }
                 
                 // Update position
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
+                this.position.x += this.velocity.x * dt;
+                this.position.y += this.velocity.y * dt;
                 
-                // Apply friction
-                this.velocity.x *= this.friction;
-                this.velocity.y *= this.friction;
-                
-                // Update movement state
-                this.speed = Math.abs(this.x - this.previousX) + Math.abs(this.y - this.previousY);
-                this.isMoving = this.speed > 0.5;
-                
-                this.previousX = this.x;
-                this.previousY = this.y;
+                // Boundary constraints with natural bouncing
+                const margin = 80;
+                if (this.position.x < 0) {
+                    this.position.x = 0;
+                    this.velocity.x = Math.abs(this.velocity.x) * 0.3;
+                }
+                if (this.position.x > window.innerWidth - margin) {
+                    this.position.x = window.innerWidth - margin;
+                    this.velocity.x = -Math.abs(this.velocity.x) * 0.3;
+                }
+                if (this.position.y < 0) {
+                    this.position.y = 0;
+                    this.velocity.y = Math.abs(this.velocity.y) * 0.3;
+                }
+                if (this.position.y > window.innerHeight - 60) {
+                    this.position.y = window.innerHeight - 60;
+                    this.velocity.y = -Math.abs(this.velocity.y) * 0.3;
+                }
             }
             
             updateDirection() {
-                const dx = this.targetX - this.x;
-                const dy = this.targetY - this.y;
-                
-                if (Math.abs(dx) > Math.abs(dy)) {
-                    this.direction = dx > 0 ? 'right' : 'left';
-                } else if (this.isMoving) {
-                    this.direction = 'front';
+                if (this.currentSpeed > 0.4) {
+                    const angle = Math.atan2(this.velocity.y, this.velocity.x) * 180 / Math.PI;
+                    
+                    if (angle >= -45 && angle <= 45) {
+                        this.direction = 'right';
+                    } else if (angle >= 135 || angle <= -135) {
+                        this.direction = 'left';  
+                    } else if (angle > 45 && angle < 135) {
+                        this.direction = 'front';
+                    } else {
+                        this.direction = 'back';
+                    }
                 }
             }
             
-            updateBehavior() {
-                const now = Date.now();
-                const timeSinceMouseMove = now - this.lastMouseMove;
+            updateBehavior(dt) {
+                this.behaviorTimer += dt;
                 
-                // Switch to idle mode after 3 seconds
-                if (timeSinceMouseMove > 3000) {
-                    if (!this.isIdle) {
-                        this.isIdle = true;
-                        this.idleStartTime = now;
-                        this.currentBehavior = 'idle';
-                        this.behaviorTimer = now;
-                        this.behaviorDuration = 2000 + Math.random() * 3000; // 2-5 seconds
+                if (!this.isFollowingCursor && this.behaviorTimer >= this.behaviorDuration) {
+                    // Select behavior based on personality
+                    const behaviorWeights = {
+                        'idle': 25,
+                        'sniff': 12 + this.personalityTraits.curiosity * 8,
+                        'stretch': 8,
+                        'tail-wag': 6 + this.personalityTraits.playfulness * 6,
+                        'play': this.personalityTraits.playfulness * 10,
+                        'curious': this.personalityTraits.curiosity * 9,
+                        'sit': 10,
+                        'look-around': 8 + this.personalityTraits.curiosity * 4,
+                        'scratch': 6,
+                        'yawn': Math.max(12 - this.energy / 8, 2)
+                    };
+                    
+                    // Choose weighted random behavior  
+                    const totalWeight = Object.values(behaviorWeights).reduce((a, b) => a + b, 0);
+                    let random = Math.random() * totalWeight;
+                    
+                    for (const [behavior, weight] of Object.entries(behaviorWeights)) {
+                        random -= weight;
+                        if (random <= 0) {
+                            this.behavior = behavior;
+                            break;
+                        }
                     }
                     
-                    // Natural behavior changes during idle
-                    if (now - this.behaviorTimer > this.behaviorDuration) {
-                        this.switchBehavior();
+                    this.behaviorDuration = 45 + Math.random() * 120; // 0.75-2.75 seconds
+                    this.behaviorTimer = 0;
+                    
+                    // Some behaviors trigger movement
+                    if (this.behavior === 'play' || this.behavior === 'curious') {
+                        const randomX = Math.random() * (window.innerWidth - 160) + 80;
+                        const randomY = Math.random() * (window.innerHeight - 120) + 60;
+                        this.target.x = randomX;
+                        this.target.y = randomY;
                     }
+                }
+            }
+            
+            manageEnergy(dt) {
+                // Energy consumption based on activity
+                if (this.movementState === 'running') {
+                    this.energy = Math.max(this.energy - 0.25 * dt, 15);
+                } else if (this.movementState === 'trotting') {
+                    this.energy = Math.max(this.energy - 0.12 * dt, 15);
+                } else if (this.movementState === 'walking') {
+                    this.energy = Math.max(this.energy - 0.04 * dt, 15);
                 } else {
-                    this.isIdle = false;
-                    if (this.speed > 2) {
-                        this.currentBehavior = 'running';
-                    } else if (this.isMoving) {
-                        this.currentBehavior = 'walking';
-                    } else {
-                        this.currentBehavior = 'idle';
-                    }
-                }
-            }
-            
-            switchBehavior() {
-                const behaviors = ['idle', 'scratch', 'sniff', 'tail-wag', 'play', 'curious'];
-                const weights = [40, 15, 20, 10, 10, 5]; // Weighted probability
-                
-                let randomValue = Math.random() * 100;
-                let cumulativeWeight = 0;
-                
-                for (let i = 0; i < behaviors.length; i++) {
-                    cumulativeWeight += weights[i];
-                    if (randomValue <= cumulativeWeight) {
-                        this.currentBehavior = behaviors[i];
-                        break;
-                    }
+                    this.energy = Math.min(this.energy + 0.1 * dt, 100);
                 }
                 
-                this.behaviorTimer = Date.now();
-                this.behaviorDuration = this.getBehaviorDuration();
-                
-                // Some behaviors might trigger autonomous movement
-                if (this.currentBehavior === 'play' || this.currentBehavior === 'curious') {
-                    this.autonomousMovement();
-                }
+                this.excitement = Math.max(this.excitement - 0.2 * dt, 0);
             }
             
-            getBehaviorDuration() {
-                switch (this.currentBehavior) {
-                    case 'scratch': return 1500 + Math.random() * 1000;
-                    case 'sniff': return 2000 + Math.random() * 1500;
-                    case 'tail-wag': return 1000 + Math.random() * 2000;
-                    case 'play': return 3000 + Math.random() * 2000;
-                    case 'curious': return 2500 + Math.random() * 1500;
-                    default: return 2000 + Math.random() * 3000;
-                }
-            }
-            
-            autonomousMovement() {
-                // Puppy moves to random nearby position
-                const angle = Math.random() * Math.PI * 2;
-                const distance = 100 + Math.random() * 200;
-                this.targetX = this.x + Math.cos(angle) * distance;
-                this.targetY = this.y + Math.sin(angle) * distance;
-                
-                // Keep within screen bounds
-                this.targetX = Math.max(50, Math.min(window.innerWidth - 100, this.targetX));
-                this.targetY = Math.max(50, Math.min(window.innerHeight - 100, this.targetY));
-            }
-            
-            updateVisuals() {
+            updateAnimation() {
                 if (!this.element) return;
                 
-                // Update position
-                this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
-                
-                // Update sprite and animation based on behavior and movement
+                this.animationFrame++;
                 this.element.className = 'puppy-cursor';
                 
-                if (this.currentBehavior === 'running' || this.speed > 2) {
-                    this.element.classList.add('puppy-run-1', 'puppy-running-anim');
-                } else if (this.currentBehavior === 'walking' || this.isMoving) {
-                    const walkFrame = Math.floor(this.frameCounter / 15) % 2;
-                    this.element.classList.add(walkFrame === 0 ? 'puppy-walk-1' : 'puppy-walk-2', 'puppy-walking-anim');
-                } else {
-                    // Idle behaviors with directional sprites
-                    switch (this.direction) {
-                        case 'left':
-                            this.element.classList.add('puppy-side-left');
-                            break;
-                        case 'right':
-                            this.element.classList.add('puppy-side-right');
-                            break;
-                        default:
-                            this.element.classList.add('puppy-front-idle');
+                // Choose sprite and animation based on movement and direction
+                if (this.currentSpeed > 7) {
+                    // Running animation with proper directional sprites
+                    this.element.classList.add('puppy-running-anim');
+                    if (this.direction === 'left') {
+                        this.element.classList.add('puppy-side-left');
+                    } else if (this.direction === 'right') {
+                        this.element.classList.add('puppy-side-right');
+                    } else {
+                        this.element.classList.add('puppy-run-1');
                     }
+                } else if (this.currentSpeed > 1.0) {
+                    // Walking animation with proper frame cycling
+                    this.element.classList.add('puppy-walking-anim');
+                    this.walkCycle = Math.floor(this.animationFrame / 8) % 2;
                     
-                    // Add breathing animation for idle states
-                    if (this.currentBehavior === 'idle' || this.currentBehavior === 'sniff' || this.currentBehavior === 'curious') {
-                        this.element.classList.add('puppy-breathing-anim');
+                    if (this.direction === 'left') {
+                        this.element.classList.add('puppy-side-left');
+                    } else if (this.direction === 'right') {
+                        this.element.classList.add('puppy-side-right');
+                    } else {
+                        // Alternate walking frames for natural gait
+                        this.element.classList.add(this.walkCycle === 0 ? 'puppy-walk-1' : 'puppy-walk-2');
                     }
+                } else {
+                    // Idle behaviors with natural animations
+                    this.element.classList.add('puppy-breathing-anim');
+                    this.renderIdleBehavior();
                 }
                 
-                this.frameCounter++;
+                // Update DOM position
+                this.element.style.left = this.position.x + 'px';
+                this.element.style.top = this.position.y + 'px';
             }
             
-            startBehaviorSystem() {
-                const animate = () => {
-                    this.updatePhysics();
-                    this.updateDirection();
-                    this.updateBehavior();
-                    this.updateVisuals();
+            renderIdleBehavior() {
+                this.element.style.transform = '';
+                
+                switch (this.behavior) {
+                    case 'sniff':
+                        this.element.classList.add(this.direction === 'left' ? 'puppy-side-left' : 'puppy-side-right');
+                        this.element.style.transform = 'translateY(5px) rotateX(10deg)';
+                        break;
+                    case 'stretch':
+                        this.element.classList.add('puppy-front-idle');
+                        this.element.style.transform = 'scaleX(1.08) translateY(-1px)';
+                        break;
+                    case 'tail-wag':
+                        this.element.classList.add('puppy-side-right');
+                        const wag = Math.sin(this.animationFrame * 0.3) * 2.5;
+                        this.element.style.transform = `rotateZ(${wag}deg)`;
+                        break;
+                    case 'sit':
+                        this.element.classList.add('puppy-front-idle');
+                        this.element.style.transform = 'translateY(8px) scaleY(0.85)';
+                        break;
+                    case 'look-around':
+                        const lookDirection = Math.sin(this.animationFrame * 0.05) > 0 ? 'puppy-side-left' : 'puppy-side-right';
+                        this.element.classList.add(lookDirection);
+                        break;
+                    case 'scratch':
+                        this.element.classList.add('puppy-side-right');
+                        const scratch = this.animationFrame % 12 < 6 ? 3 : -1.5;
+                        this.element.style.transform = `rotateZ(${scratch}deg) translateX(${scratch * 0.4}px)`;
+                        break;
+                    case 'yawn':
+                        this.element.classList.add('puppy-front-idle');
+                        const yawnScale = 1 + Math.sin(this.animationFrame * 0.1) * 0.025;
+                        this.element.style.transform = `scaleY(${yawnScale})`;
+                        break;
+                    case 'play':
+                        this.element.classList.add('puppy-front-idle');
+                        const bounce = Math.abs(Math.sin(this.animationFrame * 0.18)) * 6;
+                        this.element.style.transform = `translateY(-${bounce}px) scaleY(${0.96 + bounce/100})`;
+                        break;
+                    default:
+                        this.element.classList.add('puppy-front-idle');
+                }
+            }
+            
+            startAnimationLoop() {
+                const animate = (currentTime) => {
+                    const deltaTime = currentTime - this.lastUpdate;
+                    this.lastUpdate = currentTime;
+                    
+                    this.updatePhysics(deltaTime);
                     requestAnimationFrame(animate);
                 };
-                animate();
+                requestAnimationFrame(animate);
             }
         }
         
-        // Initialize the Virtual Golden Retriever
+        // Initialize the realistic physics-based puppy
         if (window.innerWidth > 768) {
-            new VirtualGoldenRetriever();
+            const realisticPuppy = new RealisticPuppy();
         }
     </script>
 </body>
